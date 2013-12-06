@@ -14,6 +14,6 @@ import (
 
 func init() {
 	beego.Router("/", &controllers.HomeController{})
-	beego.Router("/station/:stationId([\\w| ]+)", &controllers.BuoyController{}, "get:Station")
-	beego.Router("/region/:region([\\w| ]+)", &controllers.BuoyController{}, "get:Region")
+	beego.Router("/station/:stationId", &controllers.BuoyController{}, "get:Station")
+	beego.Router("/region/:region", &controllers.BuoyController{}, "get:Region")
 }

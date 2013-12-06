@@ -8,9 +8,9 @@
 package testEndpoints
 
 import (
-	_ "github.com/PowerWallet/RelevancyEngine/routes"
-	"github.com/PowerWallet/RelevancyEngine/utilities/helper"
-	"github.com/PowerWallet/RelevancyEngine/utilities/mongo"
+	_ "github.com/goinggo/beego-mgo/routes"
+	"github.com/goinggo/beego-mgo/utilities/helper"
+	"github.com/goinggo/beego-mgo/utilities/mongo"
 	"github.com/goinggo/tracelog"
 )
 

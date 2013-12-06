@@ -22,10 +22,10 @@ type BuoyController struct {
 
 // Stations returns the specified station
 func (this *BuoyController) Station() {
-	buoyBusiness.Station(&this.BaseController, this.Ctx.Input.Param(":stationId"))
+	buoyBusiness.Station(&this.BaseController, this.GetString(":stationId"))
 }
 
 // Stations returns the specified region
 func (this *BuoyController) Region() {
-	buoyBusiness.Region(&this.BaseController, this.Ctx.Input.Param(":region"))
+	buoyBusiness.Region(&this.BaseController, this.GetString(":region"))
 }
