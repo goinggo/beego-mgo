@@ -3,9 +3,9 @@
 Copyright 2013 Ardan Studios. All rights reserved.  
 Use of this source code is governed by a BSD-style license that can be found in the LICENSE handle.
 
-This application provides a sample to use the beego web framework and the Go MongoDB driver mgo. This program connects to a public MongoDB at MongoLab. A single collection is available for testing. The configuration can be found in the app.conf file.
+This application provides a sample to use the beego web framework and the Go MongoDB driver mgo. This program connects to a public MongoDB at MongoLab. A single collection is available for testing.
 
-The project also includes several shell scripts to make building and running the web application easier.
+The project includes several shell scripts in the zscripts folder to make building and running the web application easier.
 
 Ardan Studios  
 12973 SW 112 ST, Suite 153  
@@ -46,3 +46,5 @@ The more that can be abstracted into the base controller and base service the be
 The utilities folder is just that, support for the web application, mostly used by the services. You have exception handling support, extended logging support and the mongo support.
 
 The abstraction layer for executing MongoDB queries and commands help hide the boilerplate code away into the base service and mongo utility code.
+
+Using environmental variables for the configuration parameters provides a best practice for minimizing security risks. The scripts in the zscripts folder contains the environment variables required to run the web application. In a real project these settings would never be saved in source control.
