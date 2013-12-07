@@ -8,11 +8,12 @@
 package controllerbase
 
 import (
+	"runtime"
+
 	"github.com/astaxie/beego"
 	"github.com/goinggo/beego-mgo/app/services"
 	"github.com/goinggo/beego-mgo/utilities/mongo"
 	"github.com/goinggo/tracelog"
-	"runtime"
 )
 
 //** TYPES

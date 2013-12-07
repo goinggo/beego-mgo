@@ -8,11 +8,12 @@
 package testEndpoints
 
 import (
-	"github.com/astaxie/beego"
-	. "github.com/smartystreets/goconvey/convey"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/astaxie/beego"
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 // TestStation is a sample to run an endpoint test
