@@ -5,7 +5,7 @@ Use of this source code is governed by a BSD-style license that can be found in 
 
 This application provides a sample to use the beego web framework and the Go MongoDB driver mgo. This program connects to a public MongoDB at MongoLab. A single collection is available for testing.
 
-The project includes several shell scripts in the zscripts folder to make building and running the web application easier.
+The project includes several shell scripts in the zscripts folder to make building, running and testing the web application easier.
 
 Ardan Studios  
 12973 SW 112 ST, Suite 153  
@@ -17,9 +17,13 @@ bill@ardanstudios.com
 	-- Get, build and install the code
 	go get github.com/goinggo/beego-mgo
 	
-	-- Run the code
+	-- Run the web service
 	cd $GOPATH/src/github.com/goinggo/beego-mgo/zscripts
 	./runbuild.sh
+	
+	-- Run the tests
+	cd $GOPATH/src/github.com/goinggo/beego-mgo/zscripts
+	./runtests.sh
 	
 	-- Test Web Service API's
 	
