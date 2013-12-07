@@ -10,13 +10,14 @@ package mongo
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
+	"time"
+	
 	"github.com/goinggo/beego-mgo/utilities/helper"
 	"github.com/goinggo/tracelog"
 	"github.com/kelseyhightower/envconfig"
 	"labix.org/v2/mgo"
 	"labix.org/v2/mgo/bson"
-	"strings"
-	"time"
 )
 
 //** CONSTANTS
