@@ -55,7 +55,7 @@ func (this *BaseController) Finish() {
 
 //** CATCHING PANICS
 
-// CatchBusinessPanic is used to catch any Panic and log exceptions to Stdout. It will also write the stack trace
+// CatchPanic is used to catch any Panic and log exceptions. Returns a 500 as the response
 func CatchPanic(controller *BaseController, functionName string) {
 	if r := recover(); r != nil {
 		buf := make([]byte, 10000)
