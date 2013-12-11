@@ -37,7 +37,7 @@ func (this *BaseController) Prepare() {
 	this.MongoSession, err = mongo.CopyMonotonicSession(this.UserId)
 	if err != nil {
 		tracelog.ERRORf(err, this.UserId, "Before", this.Ctx.Request.URL.Path)
-		this.Abort("500")
+		this.Ctx.Redirect(500, "/")
 	}
 }
 
@@ -64,7 +64,7 @@ func CatchPanic(controller *BaseController, functionName string) {
 
 			tracelog.WARN(controller.Service.UserId, functionName, "PANIC Defered [%v] : Stack Trace : %v", r, string(buf))
 
-			controller.Abort("500")
+			controller.Ctx.Redirect(500, "/")
 		}
 	}
 }
