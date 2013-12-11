@@ -12,7 +12,7 @@ import (
 	"fmt"
 	"strings"
 	"time"
-	
+
 	"github.com/goinggo/beego-mgo/utilities/helper"
 	"github.com/goinggo/tracelog"
 	"github.com/kelseyhightower/envconfig"
@@ -291,7 +291,6 @@ func Execute(sessionId string, mongoSession *mgo.Session, databaseName string, c
 	// Execute the mongo call
 	err = mongoCall(collection)
 	if err != nil {
-
 		tracelog.COMPLETED_ERROR(err, sessionId, "Execute")
 		return err
 	}

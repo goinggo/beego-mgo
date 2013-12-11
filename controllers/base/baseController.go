@@ -58,11 +58,13 @@ func (this *BaseController) Finish() {
 // CatchPanic is used to catch any Panic and log exceptions. Returns a 500 as the response
 func CatchPanic(controller *BaseController, functionName string) {
 	if r := recover(); r != nil {
-		buf := make([]byte, 10000)
-		runtime.Stack(buf, false)
+		if r != "500" {
+			buf := make([]byte, 10000)
+			runtime.Stack(buf, false)
 
-		tracelog.WARN(controller.Service.UserId, functionName, "PANIC Defered [%v] : Stack Trace : %v", r, string(buf))
+			tracelog.WARN(controller.Service.UserId, functionName, "PANIC Defered [%v] : Stack Trace : %v", r, string(buf))
 
-		controller.Abort("500")
+			controller.Abort("500")
+		}
 	}
 }

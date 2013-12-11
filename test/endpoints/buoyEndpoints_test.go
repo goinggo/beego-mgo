@@ -13,6 +13,7 @@ import (
 	"testing"
 
 	"github.com/astaxie/beego"
+	"github.com/goinggo/tracelog"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
@@ -21,6 +22,8 @@ func TestStation(t *testing.T) {
 	r, _ := http.NewRequest("GET", "/station/42002", nil)
 	w := httptest.NewRecorder()
 	beego.BeeApp.Handlers.ServeHTTP(w, r)
+
+	tracelog.TRACE("testing", "TestStation", "Code[%d]\n%s", w.Code, w.Body.String())
 
 	Convey("Subject: Test Station Endpoint\n", t, func() {
 		So(w.Code, ShouldEqual, 200)
@@ -33,6 +36,8 @@ func TestRegion(t *testing.T) {
 	r, _ := http.NewRequest("GET", "/region/Gulf%20Of%20Mexico", nil)
 	w := httptest.NewRecorder()
 	beego.BeeApp.Handlers.ServeHTTP(w, r)
+
+	tracelog.TRACE("testing", "TestRegion", "Code[%d]\n%s", w.Code, w.Body.String())
 
 	Convey("Subject: Test Region Endpoint\n", t, func() {
 		So(w.Code, ShouldEqual, 200)
