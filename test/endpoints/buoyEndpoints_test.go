@@ -12,6 +12,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"encoding/json"
 	"github.com/astaxie/beego"
 	"github.com/goinggo/tracelog"
 	. "github.com/smartystreets/goconvey/convey"
@@ -25,9 +26,15 @@ func TestStation(t *testing.T) {
 
 	tracelog.TRACE("testing", "TestStation", "Code[%d]\n%s", w.Code, w.Body.String())
 
+	err := struct {
+		Error string
+	}{}
+	json.Unmarshal(w.Body.Bytes(), &err)
+
 	Convey("Subject: Test Station Endpoint\n", t, func() {
 		So(w.Code, ShouldEqual, 200)
 		So(w.Body.Len(), ShouldBeGreaterThan, 0)
+		So(len(err.Error), ShouldEqual, 0)
 	})
 }
 
@@ -39,8 +46,14 @@ func TestRegion(t *testing.T) {
 
 	tracelog.TRACE("testing", "TestRegion", "Code[%d]\n%s", w.Code, w.Body.String())
 
+	err := struct {
+		Error string
+	}{}
+	json.Unmarshal(w.Body.Bytes(), &err)
+
 	Convey("Subject: Test Region Endpoint\n", t, func() {
 		So(w.Code, ShouldEqual, 200)
 		So(w.Body.Len(), ShouldBeGreaterThan, 0)
+		So(len(err.Error), ShouldEqual, 0)
 	})
 }

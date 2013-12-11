@@ -24,7 +24,7 @@ func Station(controller *cb.BaseController, stationId string) {
 	buoyStation, err := buoyService.FindStation(&controller.Service, stationId)
 	if err != nil {
 		tracelog.COMPLETED_ERRORf(err, controller.UserId, "Station", "StationId[%s]", stationId)
-		controller.Ctx.Redirect(500, "/")
+		controller.ServeError(err)
 		return
 	}
 
@@ -43,7 +43,7 @@ func Region(controller *cb.BaseController, region string) {
 	buoyStations, err := buoyService.FindRegion(&controller.Service, region)
 	if err != nil {
 		tracelog.COMPLETED_ERRORf(err, controller.UserId, "Region", "Region[%s]", region)
-		controller.Ctx.Redirect(500, "/")
+		controller.ServeError(err)
 		return
 	}
 

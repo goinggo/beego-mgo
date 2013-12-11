@@ -10,6 +10,7 @@ package controllerbase
 import (
 	"runtime"
 
+	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/goinggo/beego-mgo/app/services"
 	"github.com/goinggo/beego-mgo/utilities/mongo"
@@ -37,7 +38,7 @@ func (this *BaseController) Prepare() {
 	this.MongoSession, err = mongo.CopyMonotonicSession(this.UserId)
 	if err != nil {
 		tracelog.ERRORf(err, this.UserId, "Before", this.Ctx.Request.URL.Path)
-		this.Ctx.Redirect(500, "/")
+		this.ServeError(err)
 	}
 }
 
@@ -53,18 +54,26 @@ func (this *BaseController) Finish() {
 	tracelog.COMPLETEDf(this.UserId, "Finish", this.Ctx.Request.URL.Path)
 }
 
+//** EXCEPTIONS
+
+// ServeError prepares and serves an error exception
+func (this *BaseController) ServeError(err error) {
+	this.Data["json"] = struct {
+		Error string
+	}{err.Error()}
+	this.ServeJson()
+}
+
 //** CATCHING PANICS
 
 // CatchPanic is used to catch any Panic and log exceptions. Returns a 500 as the response
 func CatchPanic(controller *BaseController, functionName string) {
 	if r := recover(); r != nil {
-		if r != "500" {
-			buf := make([]byte, 10000)
-			runtime.Stack(buf, false)
+		buf := make([]byte, 10000)
+		runtime.Stack(buf, false)
 
-			tracelog.WARN(controller.Service.UserId, functionName, "PANIC Defered [%v] : Stack Trace : %v", r, string(buf))
+		tracelog.WARN(controller.Service.UserId, functionName, "PANIC Defered [%v] : Stack Trace : %v", r, string(buf))
 
-			controller.Ctx.Redirect(500, "/")
-		}
+		controller.ServeError(fmt.Errorf("%v", r))
 	}
 }
