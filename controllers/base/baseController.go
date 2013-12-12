@@ -61,6 +61,7 @@ func (this *BaseController) ServeError(err error) {
 	this.Data["json"] = struct {
 		Error string
 	}{err.Error()}
+	this.Ctx.Output.SetStatus(400)
 	this.ServeJson()
 }
 
