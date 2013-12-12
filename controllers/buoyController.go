@@ -21,11 +21,13 @@ type BuoyController struct {
 //** WEB FUNCTIONS
 
 // Stations returns the specified station
+// http://localhost:9003/station/42002
 func (this *BuoyController) Station() {
 	buoyBusiness.Station(&this.BaseController, this.GetString(":stationId"))
 }
 
 // Stations returns the specified region
+// http://localhost:9003/region/Gulf%20Of%20Mexico
 func (this *BuoyController) Region() {
 	buoyBusiness.Region(&this.BaseController, this.GetString(":region"))
 }
