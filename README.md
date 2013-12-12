@@ -7,6 +7,9 @@ This application provides a sample to use the beego web framework and the Go Mon
 
 The project includes several shell scripts in the zscripts folder to make building, running and testing the web application easier.
 
+GoingGo.net Post:  
+http://www.goinggo.net/2013/12/sample-web-application-using-beego-and.html
+
 Ardan Studios  
 12973 SW 112 ST, Suite 153  
 Miami, FL 33186  
