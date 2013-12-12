@@ -8,16 +8,16 @@
 package buoyBusiness
 
 import (
-	"github.com/goinggo/beego-mgo/app/services/buoy"
-	cb "github.com/goinggo/beego-mgo/controllers/base"
+	"github.com/goinggo/beego-mgo/app/services/buoyService"
+	bc "github.com/goinggo/beego-mgo/controllers/baseController"
 	"github.com/goinggo/tracelog"
 )
 
 //** PUBLIC FUNCTIONS
 
 // Station handles the higher level business processing for this API Call
-func Station(controller *cb.BaseController, stationId string) {
-	defer cb.CatchPanic(controller, "Station")
+func Station(controller *bc.BaseController, stationId string) {
+	defer bc.CatchPanic(controller, "Station")
 
 	tracelog.STARTEDf(controller.UserId, "Station", "StationId[%s]", stationId)
 
@@ -35,8 +35,8 @@ func Station(controller *cb.BaseController, stationId string) {
 }
 
 // Region handles the higher level business processing for this API Call
-func Region(controller *cb.BaseController, region string) {
-	defer cb.CatchPanic(controller, "Region")
+func Region(controller *bc.BaseController, region string) {
+	defer bc.CatchPanic(controller, "Region")
 
 	tracelog.STARTEDf(controller.UserId, "Region", "Region[%s]", region)
 

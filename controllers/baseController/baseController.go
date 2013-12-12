@@ -5,7 +5,7 @@
 /*
 	Implements boilerplate code for all controllers
 */
-package controllerbase
+package baseController
 
 import (
 	"runtime"

@@ -5,7 +5,7 @@
 /*
 	BuoyModels contains the models for the buoy service
 */
-package buoyModel
+package buoyModels
 
 import (
 	"labix.org/v2/mgo/bson"

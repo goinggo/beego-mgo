@@ -8,13 +8,13 @@
 package controllers
 
 import (
-	cb "github.com/goinggo/beego-mgo/controllers/base"
+	bc "github.com/goinggo/beego-mgo/controllers/baseController"
 )
 
 //** TYPES
 
 type HomeController struct {
-	cb.BaseController
+	bc.BaseController
 }
 
 //** WEB FUNCTIONS

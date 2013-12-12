@@ -8,14 +8,14 @@
 package controllers
 
 import (
-	"github.com/goinggo/beego-mgo/app/business/buoy"
-	cb "github.com/goinggo/beego-mgo/controllers/base"
+	"github.com/goinggo/beego-mgo/app/business/buoyBusiness"
+	bc "github.com/goinggo/beego-mgo/controllers/baseController"
 )
 
 //** TYPES
 
 type BuoyController struct {
-	cb.BaseController
+	bc.BaseController
 }
 
 //** WEB FUNCTIONS

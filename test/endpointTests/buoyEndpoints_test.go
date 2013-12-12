@@ -5,7 +5,7 @@
 /*
 	Implements tests for the buoy endpoints
 */
-package testEndpoints
+package endpointTests
 
 import (
 	"net/http"

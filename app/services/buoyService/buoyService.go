@@ -8,7 +8,7 @@
 package buoyService
 
 import (
-	"github.com/goinggo/beego-mgo/app/models/buoy"
+	"github.com/goinggo/beego-mgo/app/models/buoyModels"
 	"github.com/goinggo/beego-mgo/app/services"
 	"github.com/goinggo/beego-mgo/utilities/helper"
 	"github.com/goinggo/beego-mgo/utilities/mongo"
@@ -44,7 +44,7 @@ func init() {
 //** PUBLIC FUNCTIONS
 
 // FindStation retrieves the specified station
-func FindStation(service *services.Service, stationId string) (buoyStation *buoyModel.BuoyStation, err error) {
+func FindStation(service *services.Service, stationId string) (buoyStation *buoyModels.BuoyStation, err error) {
 	defer helper.CatchPanic(&err, service.UserId, "FindStation")
 
 	tracelog.STARTED(service.UserId, "FindStation")
@@ -54,7 +54,7 @@ func FindStation(service *services.Service, stationId string) (buoyStation *buoy
 	tracelog.TRACE(service.UserId, "FindStation", "Query : %s", mongo.ToString(queryMap))
 
 	// Execute the query
-	buoyStation = &buoyModel.BuoyStation{}
+	buoyStation = &buoyModels.BuoyStation{}
 	err = service.DBAction(Config.Database, "buoy_stations",
 		func(collection *mgo.Collection) error {
 			return collection.Find(queryMap).One(buoyStation)
@@ -70,7 +70,7 @@ func FindStation(service *services.Service, stationId string) (buoyStation *buoy
 }
 
 // FindRegion retrieves the stations for the specified region
-func FindRegion(service *services.Service, region string) (buoyStations []*buoyModel.BuoyStation, err error) {
+func FindRegion(service *services.Service, region string) (buoyStations []*buoyModels.BuoyStation, err error) {
 	defer helper.CatchPanic(&err, service.UserId, "FindRegion")
 
 	tracelog.STARTED(service.UserId, "FindRegion")
@@ -80,7 +80,7 @@ func FindRegion(service *services.Service, region string) (buoyStations []*buoyM
 	tracelog.TRACE(service.UserId, "FindRegion", "Query : %s", mongo.ToString(queryMap))
 
 	// Capture the specified buoy
-	buoyStations = []*buoyModel.BuoyStation{}
+	buoyStations = []*buoyModels.BuoyStation{}
 	err = service.DBAction(Config.Database, "buoy_stations",
 		func(collection *mgo.Collection) error {
 			return collection.Find(queryMap).All(&buoyStations)

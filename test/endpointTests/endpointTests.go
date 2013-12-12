@@ -5,7 +5,7 @@
 /*
 	Implements boilerplate code for all testing
 */
-package testEndpoints
+package endpointTests
 
 import (
 	_ "github.com/goinggo/beego-mgo/routes"
