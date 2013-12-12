@@ -32,9 +32,15 @@ func TestStation(t *testing.T) {
 	json.Unmarshal(w.Body.Bytes(), &err)
 
 	Convey("Subject: Test Station Endpoint\n", t, func() {
-		So(w.Code, ShouldEqual, 200)
-		So(w.Body.Len(), ShouldBeGreaterThan, 0)
-		So(len(err.Error), ShouldEqual, 0)
+		Convey("Status Code Should Be 200", func() {
+			So(w.Code, ShouldEqual, 200)
+		})
+		Convey("The Result Should Not Be Empty", func() {
+			So(w.Body.Len(), ShouldBeGreaterThan, 0)
+		})
+		Convey("The Should Be No Error In The Result", func() {
+			So(len(err.Error), ShouldEqual, 0)
+		})
 	})
 }
 
@@ -52,8 +58,14 @@ func TestRegion(t *testing.T) {
 	json.Unmarshal(w.Body.Bytes(), &err)
 
 	Convey("Subject: Test Region Endpoint\n", t, func() {
-		So(w.Code, ShouldEqual, 200)
-		So(w.Body.Len(), ShouldBeGreaterThan, 0)
-		So(len(err.Error), ShouldEqual, 0)
+		Convey("Status Code Should Be 200", func() {
+			So(w.Code, ShouldEqual, 200)
+		})
+		Convey("The Result Should Not Be Empty", func() {
+			So(w.Body.Len(), ShouldBeGreaterThan, 0)
+		})
+		Convey("The Should Be No Error In The Result", func() {
+			So(len(err.Error), ShouldEqual, 0)
+		})
 	})
 }
