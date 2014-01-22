@@ -8,6 +8,8 @@
 package buoyModels
 
 import (
+	"fmt"
+
 	"labix.org/v2/mgo/bson"
 )
 
@@ -37,3 +39,11 @@ type (
 		Location  BuoyLocation  `bson:"location"`
 	}
 )
+
+func (this *BuoyCondition) DisplayWindSpeed() string {
+	return fmt.Sprintf("%.2f", this.WindSpeed)
+}
+
+func (this *BuoyCondition) DisplayWindGust() string {
+	return fmt.Sprintf("%.2f", this.WindGust)
+}

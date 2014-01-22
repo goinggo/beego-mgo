@@ -17,6 +17,9 @@ bill@ardanstudios.com
 
 ### Installation
 
+	-- YOU MUST HAVE BAZAAR INSTALLED
+	http://wiki.bazaar.canonical.com/Download
+
 	-- Get, build and install the code
 	go get github.com/goinggo/beego-mgo
 	
@@ -30,11 +33,8 @@ bill@ardanstudios.com
 	
 	-- Test Web Service API's
 	
-	This will return a single station from Mongo
-	http://localhost:9000/station/42002
-	
-	This will return a collection of stations for the region
-	http://localhost:9000/region/Gulf%20Of%20Mexico
+	Run the Home Page and click the links
+	http://localhost:9003
 
 ### Notes About Architecture
 

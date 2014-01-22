@@ -31,3 +31,9 @@ func (this *BuoyController) Station() {
 func (this *BuoyController) Region() {
 	buoyBusiness.Region(&this.BaseController, this.GetString(":region"))
 }
+
+// ShowRegions shows a view of the stations for the region
+// http://localhost:9003/region-show/Gulf%20Of%20Mexico
+func (this *BuoyController) ShowRegions() {
+	buoyBusiness.ShowRegions(&this.BaseController, this.GetString(":region"))
+}

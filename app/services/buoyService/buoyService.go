@@ -49,11 +49,9 @@ func FindStation(service *services.Service, stationId string) (buoyStation *buoy
 
 	tracelog.STARTED(service.UserId, "FindStation")
 
-	// Find the specified station id
 	queryMap := bson.M{"station_id": stationId}
 	tracelog.TRACE(service.UserId, "FindStation", "Query : %s", mongo.ToString(queryMap))
 
-	// Execute the query
 	buoyStation = &buoyModels.BuoyStation{}
 	err = service.DBAction(Config.Database, "buoy_stations",
 		func(collection *mgo.Collection) error {
@@ -75,11 +73,9 @@ func FindRegion(service *services.Service, region string) (buoyStations []*buoyM
 
 	tracelog.STARTED(service.UserId, "FindRegion")
 
-	// Find the specified region
 	queryMap := bson.M{"region": region}
 	tracelog.TRACE(service.UserId, "FindRegion", "Query : %s", mongo.ToString(queryMap))
 
-	// Capture the specified buoy
 	buoyStations = []*buoyModels.BuoyStation{}
 	err = service.DBAction(Config.Database, "buoy_stations",
 		func(collection *mgo.Collection) error {

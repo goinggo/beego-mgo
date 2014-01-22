@@ -20,7 +20,6 @@ type HomeController struct {
 //** WEB FUNCTIONS
 
 func (this *HomeController) Get() {
-	this.Data["Website"] = "ArdanStudios.com"
 	this.Data["Email"] = "bill@ardanstudios.com"
-	this.TplNames = "index.tpl"
+	this.TplNames = "index.html"
 }
