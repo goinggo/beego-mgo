@@ -19,7 +19,11 @@ type HomeController struct {
 
 //** WEB FUNCTIONS
 
-func (this *HomeController) Get() {
+func (this *HomeController) Index() {
 	this.Data["Email"] = "bill@ardanstudios.com"
 	this.TplNames = "index.html"
+}
+
+func (this *HomeController) ShowAjax() {
+	this.AjaxResponse(0, "SUCCESS", map[string]interface{}{"Name": "bill", "Test": "good"})
 }

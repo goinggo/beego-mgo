@@ -78,3 +78,21 @@ func (this *BaseController) CatchPanic(functionName string) {
 		this.ServeError(fmt.Errorf("%v", r))
 	}
 }
+
+//** AJAX SUPPORT
+
+// AjaxResponse returns a standard ajax response
+func (this *BaseController) AjaxResponse(resultCode int, resultString string, data interface{}) {
+	response := struct {
+		Result       int
+		ResultString string
+		ResultObject interface{}
+	}{
+		Result:       resultCode,
+		ResultString: resultString,
+		ResultObject: data,
+	}
+
+	this.Data["json"] = response
+	this.ServeJson()
+}
