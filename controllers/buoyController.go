@@ -24,7 +24,7 @@ type BuoyController struct {
 // Stations returns the specified station
 // http://localhost:9003/station/42002
 func (this *BuoyController) Station() {
-	defer bc.CatchPanic(&this.BaseController, "Station")
+	defer this.CatchPanic("Station")
 
 	stationId := this.GetString(":stationId")
 
@@ -46,7 +46,7 @@ func (this *BuoyController) Station() {
 // Stations returns the specified region
 // http://localhost:9003/region/Gulf%20Of%20Mexico
 func (this *BuoyController) Region() {
-	defer bc.CatchPanic(&this.BaseController, "Region")
+	defer this.CatchPanic("Region")
 
 	region := this.GetString(":region")
 
@@ -68,7 +68,7 @@ func (this *BuoyController) Region() {
 // ShowRegions shows a view of the stations for the region
 // http://localhost:9003/region-show/Gulf%20Of%20Mexico
 func (this *BuoyController) ShowRegions() {
-	defer bc.CatchPanic(&this.BaseController, "ShowRegions")
+	defer this.CatchPanic("ShowRegions")
 
 	region := this.GetString(":region")
 
