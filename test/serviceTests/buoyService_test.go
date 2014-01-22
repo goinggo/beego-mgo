@@ -1,7 +1,7 @@
 package serviceTests
 
 import (
-	"github.com/goinggo/beego-mgo/app/services/buoyService"
+	"github.com/goinggo/beego-mgo/services/buoyService"
 	. "github.com/smartystreets/goconvey/convey"
 	"testing"
 )
