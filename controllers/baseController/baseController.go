@@ -12,7 +12,7 @@ import (
 
 	"fmt"
 	"github.com/astaxie/beego"
-	"github.com/goinggo/beego-mgo/app/services"
+	"github.com/goinggo/beego-mgo/services"
 	"github.com/goinggo/beego-mgo/utilities/mongo"
 	"github.com/goinggo/tracelog"
 )

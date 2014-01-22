@@ -8,8 +8,8 @@
 package buoyService
 
 import (
-	"github.com/goinggo/beego-mgo/app/models/buoyModels"
-	"github.com/goinggo/beego-mgo/app/services"
+	"github.com/goinggo/beego-mgo/models/buoyModels"
+	"github.com/goinggo/beego-mgo/services"
 	"github.com/goinggo/beego-mgo/utilities/helper"
 	"github.com/goinggo/beego-mgo/utilities/mongo"
 	"github.com/goinggo/tracelog"

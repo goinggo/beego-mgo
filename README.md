@@ -39,13 +39,11 @@ bill@ardanstudios.com
 
 I have been asked why I have organized the code in this way?
 
-For me the controller should do nothing more than call into the business layer. The business layer contains the business logic for processing the request.
-
 The models folder contains the data structures for the individual services. Each service places their models in a separate folder.
 
 The services folder contain the raw service calls that the business layer would use to implement higher level functionality.
 
-The controller methods just exist to receive the request and process the request through the business layer.
+The controller methods handle and process the requests.
 
 The more that can be abstracted into the base controller and base service the better. This way, adding a new functionality is simple and you don't need to worry about forgetting to do something important. Authentication always comes to mind.
 
