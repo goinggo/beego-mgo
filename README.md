@@ -32,7 +32,7 @@ bill@ardanstudios.com
 	./runtests.sh
 	
 	-- Test Web Service API's
-	Run the home page and click the links
+	Run the home page and go through the tabs
 	http://localhost:9003
 
 ### Notes About Architecture

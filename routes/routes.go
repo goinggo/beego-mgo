@@ -13,10 +13,7 @@ import (
 )
 
 func init() {
-	beego.Router("/", &controllers.HomeController{}, "get:Index")
-	beego.Router("/testajax", &controllers.HomeController{}, "get,post:ShowAjax")
-
-	beego.Router("/station/:stationId", &controllers.BuoyController{}, "get:Station")
-	beego.Router("/region/:region", &controllers.BuoyController{}, "get:Region")
-	beego.Router("/region-show/:region", &controllers.BuoyController{}, "get:ShowRegions")
+	beego.Router("/", &controllers.BuoyController{}, "get:Index")
+	beego.Router("/buoy/retrievestation", &controllers.BuoyController{}, "post:RetrieveStation")
+	beego.Router("/buoy/station/:stationId", &controllers.BuoyController{}, "get,post:RetrieveStationJson")
 }

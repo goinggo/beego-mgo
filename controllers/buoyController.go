@@ -21,14 +21,50 @@ type BuoyController struct {
 
 //** WEB FUNCTIONS
 
-// Stations returns the specified station
-// http://localhost:9003/station/42002
-func (this *BuoyController) Station() {
-	defer this.CatchPanic("Station")
+// Index is the initial view for the buoy system
+func (this *BuoyController) Index() {
+	region := "Gulf Of Mexico"
+	tracelog.STARTEDf(this.UserId, "BuoyController.Index", "Region[%s]", region)
 
+	buoyStations, err := buoyService.FindRegion(&this.Service, region)
+	if err != nil {
+		tracelog.COMPLETED_ERRORf(err, this.UserId, "BuoyController.Index", "Region[%s]", region)
+		this.ServeError(err)
+		return
+	}
+
+	this.Data["Stations"] = buoyStations
+	this.Layout = "shared/basic-layout.html"
+	this.TplNames = "buoy/content.html"
+	this.LayoutSections = map[string]string{}
+	this.LayoutSections["PageHead"] = "buoy/page-head.html"
+	this.LayoutSections["Header"] = "shared/header.html"
+	this.LayoutSections["Modal"] = "shared/modal.html"
+}
+
+// RetrieveStation handles the example 2 tab
+func (this *BuoyController) RetrieveStation() {
+	stationId := this.GetString("stationId")
+
+	buoyStation, err := buoyService.FindStation(&this.Service, stationId)
+	if err != nil {
+		tracelog.COMPLETED_ERRORf(err, this.UserId, "BuoyController.RetrieveStation", "StationId[%s]", stationId)
+		this.ServeError(err)
+		return
+	}
+
+	this.Data["Station"] = buoyStation
+	this.Layout = ""
+	this.TplNames = "buoy/pv_station.html"
+	view, _ := this.RenderString()
+
+	this.AjaxResponse(0, "SUCCESS", view)
+}
+
+// Stations handles the example 3 tab
+// http://localhost:9003/buoy/station/42002
+func (this *BuoyController) RetrieveStationJson() {
 	stationId := this.GetString(":stationId")
-
-	tracelog.STARTEDf(this.UserId, "Station", "StationId[%s]", stationId)
 
 	buoyStation, err := buoyService.FindStation(&this.Service, stationId)
 	if err != nil {
@@ -39,51 +75,4 @@ func (this *BuoyController) Station() {
 
 	this.Data["json"] = &buoyStation
 	this.ServeJson()
-
-	tracelog.COMPLETED(this.UserId, "Station")
-}
-
-// Stations returns the specified region
-// http://localhost:9003/region/Gulf%20Of%20Mexico
-func (this *BuoyController) Region() {
-	defer this.CatchPanic("Region")
-
-	region := this.GetString(":region")
-
-	tracelog.STARTEDf(this.UserId, "Region", "Region[%s]", region)
-
-	buoyStations, err := buoyService.FindRegion(&this.Service, region)
-	if err != nil {
-		tracelog.COMPLETED_ERRORf(err, this.UserId, "Region", "Region[%s]", region)
-		this.ServeError(err)
-		return
-	}
-
-	this.Data["json"] = &buoyStations
-	this.ServeJson()
-
-	tracelog.COMPLETED(this.UserId, "Region")
-}
-
-// ShowRegions shows a view of the stations for the region
-// http://localhost:9003/region-show/Gulf%20Of%20Mexico
-func (this *BuoyController) ShowRegions() {
-	defer this.CatchPanic("ShowRegions")
-
-	region := this.GetString(":region")
-
-	tracelog.STARTEDf(this.UserId, "Region", "Region[%s]", region)
-
-	buoyStations, err := buoyService.FindRegion(&this.Service, region)
-	if err != nil {
-		tracelog.COMPLETED_ERRORf(err, this.UserId, "Region", "Region[%s]", region)
-		this.ServeError(err)
-		return
-	}
-
-	this.Data["stations"] = buoyStations
-	this.Layout = "buoy/layout.html"
-	this.TplNames = "buoy/content.html"
-	this.LayoutSections = map[string]string{}
-	this.LayoutSections["Stations"] = "buoy/stations.html"
 }

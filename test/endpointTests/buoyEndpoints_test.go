@@ -20,7 +20,7 @@ import (
 
 // TestStation is a sample to run an endpoint test
 func TestStation(t *testing.T) {
-	r, _ := http.NewRequest("GET", "/station/42002", nil)
+	r, _ := http.NewRequest("GET", "/buoy/station/42002", nil)
 	w := httptest.NewRecorder()
 	beego.BeeApp.Handlers.ServeHTTP(w, r)
 
@@ -32,32 +32,6 @@ func TestStation(t *testing.T) {
 	json.Unmarshal(w.Body.Bytes(), &err)
 
 	Convey("Subject: Test Station Endpoint\n", t, func() {
-		Convey("Status Code Should Be 200", func() {
-			So(w.Code, ShouldEqual, 200)
-		})
-		Convey("The Result Should Not Be Empty", func() {
-			So(w.Body.Len(), ShouldBeGreaterThan, 0)
-		})
-		Convey("The Should Be No Error In The Result", func() {
-			So(len(err.Error), ShouldEqual, 0)
-		})
-	})
-}
-
-// TestRegion is a sample to run an endpoint test
-func TestRegion(t *testing.T) {
-	r, _ := http.NewRequest("GET", "/region/Gulf%20Of%20Mexico", nil)
-	w := httptest.NewRecorder()
-	beego.BeeApp.Handlers.ServeHTTP(w, r)
-
-	tracelog.TRACE("testing", "TestRegion", "Code[%d]\n%s", w.Code, w.Body.String())
-
-	err := struct {
-		Error string
-	}{}
-	json.Unmarshal(w.Body.Bytes(), &err)
-
-	Convey("Subject: Test Region Endpoint\n", t, func() {
 		Convey("Status Code Should Be 200", func() {
 			So(w.Code, ShouldEqual, 200)
 		})

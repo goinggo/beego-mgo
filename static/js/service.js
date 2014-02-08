@@ -1,4 +1,16 @@
 function ServiceResult() {
+	var processJSONDataRaw = function (data) {
+		try {
+			this.Data = data;
+			this.SuccessCallback.call(this);
+		}
+		
+        catch (e) {
+            // TODO: Add Err Handler. Localize Message.
+            alert("Error Processing Request : " + e);
+        }
+	};
+	
     var processJSONData = function (data) {
         try {
             this.Result = data.Result;
@@ -43,7 +55,7 @@ function ServiceResult() {
         catch (e) {
             // TODO: Add Err Handler. Localize Message.
             alert("Error Processing Request : " + e);
-        };
+        }
     };
 
     // Handles Ajax Error
@@ -52,12 +64,14 @@ function ServiceResult() {
             alert('Error: ' + textStatus);
             this.ErrorCallback.call(this);
         }
+
         catch (e) {
         }
     };
 
     // Object Definition
     return {
+		Data: '',
         Result: '',
         ResultString: '',
         ResultObject: '',
@@ -84,6 +98,20 @@ function ServiceResult() {
                 dataType: 'json',
                 error: processError,
                 success: processJSONData,
+                context: this,
+                type: 'POST'
+            });
+        },
+		
+		// Method to Post Data via JSON
+        getJSONDataRaw: function (url, data, callback) {
+			this.SuccessCallback = callback;
+            $.ajax({
+                url: url,
+                data: data,
+                dataType: 'json',
+				error: processJSONDataRaw,
+                success: processJSONDataRaw,
                 context: this,
                 type: 'POST'
             });

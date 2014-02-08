@@ -31,15 +31,22 @@ type (
 
 // Prepare is called prior to the controller method
 func (this *BaseController) Prepare() {
-	this.UserId = "unknown" // TODO: Deal With This Later
-	tracelog.TRACE(this.UserId, "Before", "UserId[%s] Path[%s]", this.UserId, this.Ctx.Request.URL.Path)
-
-	var err error
-	this.MongoSession, err = mongo.CopyMonotonicSession(this.UserId)
-	if err != nil {
-		tracelog.ERRORf(err, this.UserId, "Before", this.Ctx.Request.URL.Path)
-		this.ServeError(err)
+	this.UserId = this.GetString("userId")
+	if this.UserId == "" {
+		this.UserId = this.GetString(":userId")
 	}
+	if this.UserId == "" {
+		this.UserId = "Unknown"
+	}
+
+	err := this.Service.Prepare()
+	if err != nil {
+		tracelog.ERRORf(err, this.UserId, "BaseController.Prepare", this.Ctx.Request.URL.Path)
+		this.ServeError(err)
+		return
+	}
+
+	tracelog.TRACE(this.UserId, "BaseController.Prepare", "UserId[%s] Path[%s]", this.UserId, this.Ctx.Request.URL.Path)
 }
 
 // Finish is called once the controller method completes

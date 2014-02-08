@@ -1,1 +1,84 @@
-<span class="title">Sample Display Of A Slice Of Stations</span>
+<div class="wrapper">
+	<div class="row tab-row">
+		<div class="col-md-12">
+			<!-- Nav tabs -->
+			<ul class="nav nav-tabs">
+				<li class="active"><a href="#section1" data-toggle="tab">Example 1</a></li>
+				<li><a href="#section2" data-toggle="tab">Example 2</a></li>
+				<li><a href="#section3" data-toggle="tab">Example 3</a></li>
+			</ul>
+		</div>
+	</div>
+	
+	<!-- Tab panes -->
+	<div class="tab-content">
+		
+		<div class="tab-pane active" id="section1">
+			<div class="row user-row">
+				<div class="col-md-12 space">
+					<h4>This examples shows how to load a view on the initial request</h4>
+					<br />
+					<table class="table table-striped">
+						<tr>
+							<th>Station Id</th>
+							<th>Name</th>
+							<th>LocDesc</th>
+							<th>Wind Speed</th>
+							<th>Wind Direction</th>
+							<th>Wind Gust</th>
+						</tr>
+						{{range $index, $val := .Stations}}
+						<tr>
+							<td>{{$val.StationId}}</td>
+							<td>{{$val.Name}}</td>
+							<td>{{$val.LocDesc}}</td>
+							<td>{{$val.Condition.DisplayWindSpeed}}</td>
+							<td>{{$val.Condition.WindDirection}}</td>
+							<td>{{$val.Condition.DisplayWindGust}}</td>
+						</tr>
+						{{end}}
+					</table>
+				</div>
+			</div>
+		</div><!-- tan-pane -->
+	
+		<div class="tab-pane" id="section2">
+			<div class="row">
+				<div class="col-md-12 space">
+					<h4>This example shows how to load a view using an AJAX call and Partial View</h4>
+					<br />
+					<select class="selectpicker" data-style="btn-success" id="station-names">
+						{{range $index, $val := .Stations}}
+							<option value="{{$val.StationId}}">{{$val.Name}}</option>
+						{{end}}
+					</select>
+					<input class="btn btn-success" id="load-station-button" class="button" type="button" value="Refresh"/>
+					<br /><br />
+					<div id="stations-view">
+						Loading View, Please Wait...
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="tab-pane" id="section3">
+			<div class="row">
+				<div class="col-md-12 space">
+					<h4>This example shows how to return a JSON document</h4>
+					<br />
+					<select class="selectpicker" data-style="btn-success" id="station-names-json">
+						{{range $index, $val := .Stations}}
+							<option value="{{$val.StationId}}">{{$val.Name}}</option>
+						{{end}}
+					</select>
+					<input class="btn btn-success" id="load-station-button-json" class="button" type="button" value="Own Tab"/>
+					<br /><br />
+					<div id="stations-view-json">
+						Loading View, Please Wait...
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div><!-- Tab Content End -->
+</div><!-- Wrapper End -->

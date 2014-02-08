@@ -39,31 +39,24 @@ func init() {
 
 //** INTERCEPT FUNCTIONS
 
-// Prepare is called create a service object
 func Prepare() *services.Service {
 	service := &services.Service{}
 
-	service.UserId = "testing" // TODO: Deal With This Later
-	tracelog.TRACE(service.UserId, "Before", "UserId[%s]", service.UserId)
+	// TODO: Add Test User To Environment
+	service.UserId = "testing"
 
-	var err error
-	service.MongoSession, err = mongo.CopyMonotonicSession(service.UserId)
+	err := service.Prepare()
 	if err != nil {
-		tracelog.ERROR(err, service.UserId, "Before")
+		tracelog.ERROR(err, service.UserId, "Prepare")
 		return nil
 	}
 
+	tracelog.TRACE(service.UserId, "Before", "UserId[%s]", service.UserId)
 	return service
 }
 
-// Finish is called once the controller method completes
 func Finish(service *services.Service) {
-	defer func() {
-		if service.MongoSession != nil {
-			mongo.CloseSession(service.UserId, service.MongoSession)
-			service.MongoSession = nil
-		}
-	}()
+	service.Finish()
 
 	tracelog.COMPLETED(service.UserId, "Finish")
 }

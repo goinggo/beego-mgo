@@ -8,7 +8,9 @@
 package services
 
 import (
+	"github.com/goinggo/beego-mgo/utilities/helper"
 	"github.com/goinggo/beego-mgo/utilities/mongo"
+	"github.com/goinggo/tracelog"
 	"labix.org/v2/mgo"
 )
 
@@ -23,6 +25,27 @@ type (
 )
 
 //** PUBLIC FUNCTIONS
+
+func (this *Service) Prepare() (err error) {
+	this.MongoSession, err = mongo.CopyMonotonicSession(this.UserId)
+	if err != nil {
+		tracelog.ERROR(err, this.UserId, "Service.Prepare")
+		return err
+	}
+
+	return err
+}
+
+func (this *Service) Finish() (err error) {
+	defer helper.CatchPanic(&err, this.UserId, "Service.Finish")
+
+	if this.MongoSession != nil {
+		mongo.CloseSession(this.UserId, this.MongoSession)
+		this.MongoSession = nil
+	}
+
+	return err
+}
 
 // Execute the MongoDB literal function
 func (this *Service) DBAction(databaseName string, collectionName string, mongoCall mongo.MongoCall) (err error) {

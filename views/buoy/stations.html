@@ -1,6 +1,0 @@
-<table class="list">
-	<tr><th>Station Id</th><th>Name</th><th>LocDesc</th><th>Wind Speed</th><th>Wind Direction</th><th>Wind Gust</th></tr>
-	{{range $index, $val := .stations}}
-		<tr><td>{{$val.StationId}}</td><td>{{$val.Name}}</td><td>{{$val.LocDesc}}</td><td>{{$val.Condition.DisplayWindSpeed}}</td><td>{{$val.Condition.WindDirection}}</td><td>{{$val.Condition.DisplayWindGust}}</td></tr>
-	{{end}}
-</table>
