@@ -42,6 +42,8 @@ func (this *BuoyController) Index() {
 	this.LayoutSections["Modal"] = "shared/modal.html"
 }
 
+//** AJAX FUNCTIONS
+
 // RetrieveStation handles the example 2 tab
 func (this *BuoyController) RetrieveStation() {
 	stationId := this.GetString("stationId")

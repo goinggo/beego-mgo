@@ -1,8 +1,0 @@
-<ul class="list-group">
-	<li class="list-group-item name">{{.Station.Name}}</li>
-    <li class="list-group-item"><b>Location Description:</b> {{.Station.LocDesc}}</li>
-    <li class="list-group-item"><b>Wind Speed:</b> {{.Station.Condition.WindSpeed}}</li>
-	<li class="list-group-item"><b>Wind Direction:</b> {{.Station.Condition.WindDirection}}</li>
-	<li class="list-group-item"><b>Wind Gust:</b> {{.Station.Condition.WindGust}}</li>
-    <li class="list-group-item"><b>Location:</b> {{index .Station.Location.Coordinates 1}},{{index .Station.Location.Coordinates 0}}</li>
-</ul>

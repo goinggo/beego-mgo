@@ -1,10 +1,7 @@
 $(document).ready(function() {
-	$('#station-names').change(function() {
-		LoadStation();
-    });
-	
-	$('#load-station-button').click(function() {
-		LoadStation();
+	$('.detail').click(function(e) {
+		e.preventDefault();
+		ShowDetail(this);
 	});
 	
 	$('#station-names-json').change(function() {
@@ -15,7 +12,6 @@ $(document).ready(function() {
 		LoadStationJsonOwnTab();
 	});
 	
-	LoadStation();
 	LoadStationJson();
 });
 
@@ -49,17 +45,15 @@ function Standard_ErrorCallback() {
     }
 }
 
-function LoadStation() {
+function ShowDetail(result) {
 	try {
-		$('#stations-view').html('Loading View, Please Wait...');
-		
 		var postData = {};
-		postData["stationId"] = $('#station-names').val();
+		postData["stationId"] = $(result).attr('data');
 		
         var service = new ServiceResult();
         service.getJSONData("/buoy/retrievestation",
                             postData,
-                            LoadStation_Callback,
+                            ShowDetail_Callback,
                             Standard_ValidationCallback,
                             Standard_ErrorCallback
                             );
@@ -70,9 +64,11 @@ function LoadStation() {
     }
 }
 
-function LoadStation_Callback() {
+function ShowDetail_Callback() {
 	try {
-		$('#stations-view').html(this.ResultObject);
+		$('#system-modal-title').html("Buoy Details");
+		$('#system-modal-content').html(this.ResultObject);
+		$("#systemModal").modal('show');
 	}
 	
 	catch (e) {
