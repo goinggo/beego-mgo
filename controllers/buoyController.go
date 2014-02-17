@@ -46,18 +46,24 @@ func (this *BuoyController) Index() {
 
 // RetrieveStation handles the example 2 tab
 func (this *BuoyController) RetrieveStation() {
-	stationId := this.GetString("stationId")
+	params := struct {
+		StationId string `form:"stationId" valid:"Required; MinSize(4)"`
+	}{}
 
-	buoyStation, err := buoyService.FindStation(&this.Service, stationId)
+	if this.ParseAndValidate(&params) == false {
+		return
+	}
+
+	buoyStation, err := buoyService.FindStation(&this.Service, params.StationId)
 	if err != nil {
-		tracelog.COMPLETED_ERRORf(err, this.UserId, "BuoyController.RetrieveStation", "StationId[%s]", stationId)
+		tracelog.COMPLETED_ERRORf(err, this.UserId, "BuoyController.RetrieveStation", "StationId[%s]", params.StationId)
 		this.ServeError(err)
 		return
 	}
 
 	this.Data["Station"] = buoyStation
 	this.Layout = ""
-	this.TplNames = "buoy/pv_station.html"
+	this.TplNames = "buoy/modal/pv_station-detail.html"
 	view, _ := this.RenderString()
 
 	this.AjaxResponse(0, "SUCCESS", view)
@@ -66,11 +72,17 @@ func (this *BuoyController) RetrieveStation() {
 // Stations handles the example 3 tab
 // http://localhost:9003/buoy/station/42002
 func (this *BuoyController) RetrieveStationJson() {
-	stationId := this.GetString(":stationId")
+	params := struct {
+		StationId string `form:":stationId" valid:"Required; MinSize(4)"`
+	}{}
 
-	buoyStation, err := buoyService.FindStation(&this.Service, stationId)
+	if this.ParseAndValidate(&params) == false {
+		return
+	}
+
+	buoyStation, err := buoyService.FindStation(&this.Service, params.StationId)
 	if err != nil {
-		tracelog.COMPLETED_ERRORf(err, this.UserId, "Station", "StationId[%s]", stationId)
+		tracelog.COMPLETED_ERRORf(err, this.UserId, "Station", "StationId[%s]", params.StationId)
 		this.ServeError(err)
 		return
 	}

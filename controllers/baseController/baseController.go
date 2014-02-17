@@ -12,6 +12,7 @@ import (
 
 	"fmt"
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/validation"
 	"github.com/goinggo/beego-mgo/services"
 	"github.com/goinggo/beego-mgo/utilities/mongo"
 	"github.com/goinggo/tracelog"
@@ -61,6 +62,30 @@ func (this *BaseController) Finish() {
 	tracelog.COMPLETEDf(this.UserId, "Finish", this.Ctx.Request.URL.Path)
 }
 
+//** VALIDATION
+
+func (this *BaseController) ParseAndValidate(params interface{}) bool {
+	err := this.ParseForm(params)
+	if err != nil {
+		this.ServeError(err)
+		return false
+	}
+
+	valid := validation.Validation{}
+	ok, err := valid.Valid(params)
+	if err != nil {
+		this.ServeError(err)
+		return false
+	}
+
+	if ok == false {
+		this.ValidationResponse(valid.Errors)
+		return false
+	}
+
+	return true
+}
+
 //** EXCEPTIONS
 
 // ServeError prepares and serves an error exception
@@ -69,6 +94,19 @@ func (this *BaseController) ServeError(err error) {
 		Error string
 	}{err.Error()}
 	this.Ctx.Output.SetStatus(400)
+	this.ServeJson()
+}
+
+// ValidationResponse prepares and serves a validation exception
+func (this *BaseController) ValidationResponse(validationErrors []*validation.ValidationError) {
+	this.Ctx.Output.SetStatus(409)
+
+	response := make([]string, len(validationErrors))
+	for index, validationError := range validationErrors {
+		response[index] = fmt.Sprintf("%s: %s", validationError.Field, validationError.String())
+	}
+
+	this.Data["json"] = response
 	this.ServeJson()
 }
 
