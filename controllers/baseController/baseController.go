@@ -66,6 +66,8 @@ func (this *BaseController) Finish() {
 
 //** VALIDATION
 
+// ParseAndValidate will run the params through the validation framework and then
+// response with the specified localized or provided message
 func (this *BaseController) ParseAndValidate(params interface{}) bool {
 	err := this.ParseForm(params)
 	if err != nil {
