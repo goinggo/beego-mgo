@@ -1,5 +1,5 @@
-// The messages package looks for i18n folders within the current
-// directory and GOPATH and loads them into the system
+// The localize package provides support for handling different languages
+// and cultures
 package localize
 
 import (
@@ -16,8 +16,7 @@ import (
 )
 
 var (
-	// T is the translate function for the specified user
-	// locale and default locale specified during the load
+	// T is the translate function for the default locale
 	T i18n.TranslateFunc
 )
 
@@ -52,7 +51,7 @@ func CreateTranslationFunction(userLocale string, defaultLocale string) (t i18n.
 	return t, err
 }
 
-// LoadTransactionDocument takes a json document of translations and manually
+// LoadJSON takes a json document of translations and manually
 // loads them into the system
 func LoadJSON(userLocale string, translationDocument string) error {
 	tracelog.STARTEDf("localize", "LoadJSON", "UserLocale[%s] Length[%d]", userLocale, len(translationDocument))
