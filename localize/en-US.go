@@ -1,3 +1,4 @@
+// en-US.go provides the localized messages for English in the United States
 package localize
 
 var En_US = `[
