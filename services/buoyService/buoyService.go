@@ -8,6 +8,8 @@
 package buoyService
 
 import (
+	"strings"
+
 	"github.com/goinggo/beego-mgo/models/buoyModels"
 	"github.com/goinggo/beego-mgo/services"
 	"github.com/goinggo/beego-mgo/utilities/helper"
@@ -59,8 +61,12 @@ func FindStation(service *services.Service, stationId string) (buoyStation *buoy
 		})
 
 	if err != nil {
-		tracelog.COMPLETED_ERROR(err, service.UserId, "FindStation")
-		return buoyStation, err
+		if strings.Contains(err.Error(), "not found") == false {
+			tracelog.COMPLETED_ERROR(err, service.UserId, "FindStation")
+			return buoyStation, err
+		}
+
+		err = nil
 	}
 
 	tracelog.COMPLETED(service.UserId, "FindStation")

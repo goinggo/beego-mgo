@@ -8,11 +8,13 @@
 package baseController
 
 import (
+	"reflect"
 	"runtime"
 
 	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/validation"
+	"github.com/goinggo/beego-mgo/localize"
 	"github.com/goinggo/beego-mgo/services"
 	"github.com/goinggo/beego-mgo/utilities/mongo"
 	"github.com/goinggo/tracelog"
@@ -79,7 +81,38 @@ func (this *BaseController) ParseAndValidate(params interface{}) bool {
 	}
 
 	if ok == false {
-		this.ValidationResponse(valid.Errors)
+		// Build a map of the error messages for each field
+		messages2 := map[string]string{}
+		val := reflect.ValueOf(params).Elem()
+		for i := 0; i < val.NumField(); i++ {
+			// Look for an error tag in the field
+			typeField := val.Type().Field(i)
+			tag := typeField.Tag
+			tagValue := tag.Get("error")
+
+			// Was there an error tag
+			if tagValue != "" {
+				messages2[typeField.Name] = tagValue
+			}
+		}
+
+		// Build the error response
+		errors := []string{}
+		for _, err := range valid.Errors {
+			// Match an error from the validation framework errors
+			// to a field name we have a mapping for
+			message, ok := messages2[err.Field]
+			if ok == true {
+				// Use a localized message if one exists
+				errors = append(errors, localize.T(message))
+				continue
+			}
+
+			// No match, so use the message as is
+			errors = append(errors, err.Message)
+		}
+
+		this.ServeValidationErrors(errors)
 		return false
 	}
 
@@ -91,22 +124,18 @@ func (this *BaseController) ParseAndValidate(params interface{}) bool {
 // ServeError prepares and serves an error exception
 func (this *BaseController) ServeError(err error) {
 	this.Data["json"] = struct {
-		Error string
+		Error string `json:"error"`
 	}{err.Error()}
-	this.Ctx.Output.SetStatus(400)
+	this.Ctx.Output.SetStatus(500)
 	this.ServeJson()
 }
 
-// ValidationResponse prepares and serves a validation exception
-func (this *BaseController) ValidationResponse(validationErrors []*validation.ValidationError) {
+// ServeValidationErrors prepares and serves a validation exception
+func (this *BaseController) ServeValidationErrors(errors []string) {
+	this.Data["json"] = struct {
+		Errors []string `json:"errors"`
+	}{errors}
 	this.Ctx.Output.SetStatus(409)
-
-	response := make([]string, len(validationErrors))
-	for index, validationError := range validationErrors {
-		response[index] = fmt.Sprintf("%s: %s", validationError.Field, validationError.String())
-	}
-
-	this.Data["json"] = response
 	this.ServeJson()
 }
 

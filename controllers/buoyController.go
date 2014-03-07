@@ -47,7 +47,7 @@ func (this *BuoyController) Index() {
 // RetrieveStation handles the example 2 tab
 func (this *BuoyController) RetrieveStation() {
 	params := struct {
-		StationId string `form:"stationId" valid:"Required; MinSize(4)"`
+		StationId string `form:"stationId" valid:"Required; MinSize(4)" error:"invalid_station_id"`
 	}{}
 
 	if this.ParseAndValidate(&params) == false {
@@ -73,7 +73,7 @@ func (this *BuoyController) RetrieveStation() {
 // http://localhost:9003/buoy/station/42002
 func (this *BuoyController) RetrieveStationJson() {
 	params := struct {
-		StationId string `form:":stationId" valid:"Required; MinSize(4)"`
+		StationId string `form:":stationId" valid:"Required; MinSize(4)" error:"invalid_station_id"`
 	}{}
 
 	if this.ParseAndValidate(&params) == false {

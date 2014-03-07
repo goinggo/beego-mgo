@@ -8,6 +8,7 @@
 package endpointTests
 
 import (
+	"github.com/goinggo/beego-mgo/localize"
 	_ "github.com/goinggo/beego-mgo/routes"
 	"github.com/goinggo/beego-mgo/utilities/helper"
 	"github.com/goinggo/beego-mgo/utilities/mongo"
@@ -33,4 +34,7 @@ func init() {
 		tracelog.COMPLETED_ERROR(err, helper.MAIN_GO_ROUTINE, "initTesting")
 		return
 	}
+
+	// Load message strings
+	localize.Init("en-US")
 }

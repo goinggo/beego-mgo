@@ -9,6 +9,7 @@ package main
 
 import (
 	"github.com/astaxie/beego"
+	"github.com/goinggo/beego-mgo/localize"
 	_ "github.com/goinggo/beego-mgo/routes"
 	"github.com/goinggo/beego-mgo/utilities/helper"
 	"github.com/goinggo/beego-mgo/utilities/mongo"
@@ -26,6 +27,9 @@ func main() {
 		tracelog.COMPLETED_ERROR(err, helper.MAIN_GO_ROUTINE, "initApp")
 		os.Exit(1)
 	}
+
+	// Load message strings
+	localize.Init("en-US")
 
 	beego.Run()
 
