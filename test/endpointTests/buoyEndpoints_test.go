@@ -49,7 +49,7 @@ func TestStation(t *testing.T) {
 		Convey("The Result Should Not Be Empty", func() {
 			So(w.Body.Len(), ShouldBeGreaterThan, 0)
 		})
-		Convey("The Result Should Be For Station 42002", func() {
+		Convey("There Should Be A Result For Station 42002", func() {
 			So(response.StationId, ShouldEqual, "42002")
 		})
 	})
