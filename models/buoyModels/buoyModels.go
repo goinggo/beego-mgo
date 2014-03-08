@@ -40,10 +40,10 @@ type (
 	}
 )
 
-func (this *BuoyCondition) DisplayWindSpeed() string {
-	return fmt.Sprintf("%.2f", this.WindSpeed)
+func (buoyCondition *BuoyCondition) DisplayWindSpeed() string {
+	return fmt.Sprintf("%.2f", buoyCondition.WindSpeed)
 }
 
-func (this *BuoyCondition) DisplayWindGust() string {
-	return fmt.Sprintf("%.2f", this.WindGust)
+func (buoyCondition *BuoyCondition) DisplayWindGust() string {
+	return fmt.Sprintf("%.2f", buoyCondition.WindGust)
 }

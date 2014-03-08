@@ -1,5 +1,5 @@
 // Copyright 2013 Ardan Studios. All rights reserved.
-// Use of this source code is governed by a BSD-style
+// Use of service source code is governed by a BSD-style
 // license that can be found in the LICENSE handle.
 
 /*
@@ -26,28 +26,28 @@ type (
 
 //** PUBLIC FUNCTIONS
 
-func (this *Service) Prepare() (err error) {
-	this.MongoSession, err = mongo.CopyMonotonicSession(this.UserId)
+func (service *Service) Prepare() (err error) {
+	service.MongoSession, err = mongo.CopyMonotonicSession(service.UserId)
 	if err != nil {
-		tracelog.ERROR(err, this.UserId, "Service.Prepare")
+		tracelog.ERROR(err, service.UserId, "Service.Prepare")
 		return err
 	}
 
 	return err
 }
 
-func (this *Service) Finish() (err error) {
-	defer helper.CatchPanic(&err, this.UserId, "Service.Finish")
+func (service *Service) Finish() (err error) {
+	defer helper.CatchPanic(&err, service.UserId, "Service.Finish")
 
-	if this.MongoSession != nil {
-		mongo.CloseSession(this.UserId, this.MongoSession)
-		this.MongoSession = nil
+	if service.MongoSession != nil {
+		mongo.CloseSession(service.UserId, service.MongoSession)
+		service.MongoSession = nil
 	}
 
 	return err
 }
 
 // Execute the MongoDB literal function
-func (this *Service) DBAction(databaseName string, collectionName string, mongoCall mongo.MongoCall) (err error) {
-	return mongo.Execute(this.UserId, this.MongoSession, databaseName, collectionName, mongoCall)
+func (service *Service) DBAction(databaseName string, collectionName string, mongoCall mongo.MongoCall) (err error) {
+	return mongo.Execute(service.UserId, service.MongoSession, databaseName, collectionName, mongoCall)
 }

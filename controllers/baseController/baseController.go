@@ -1,9 +1,9 @@
 // Copyright 2013 Ardan Studios. All rights reserved.
-// Use of this source code is governed by a BSD-style
+// Use of baseController source code is governed by a BSD-style
 // license that can be found in the LICENSE handle.
 
 /*
-	Implements boilerplate code for all controllers
+	Implements boilerplate code for all baseControllers
 */
 package baseController
 
@@ -32,53 +32,53 @@ type (
 
 //** INTERCEPT FUNCTIONS
 
-// Prepare is called prior to the controller method
-func (this *BaseController) Prepare() {
-	this.UserId = this.GetString("userId")
-	if this.UserId == "" {
-		this.UserId = this.GetString(":userId")
+// Prepare is called prior to the baseController method
+func (baseController *BaseController) Prepare() {
+	baseController.UserId = baseController.GetString("userId")
+	if baseController.UserId == "" {
+		baseController.UserId = baseController.GetString(":userId")
 	}
-	if this.UserId == "" {
-		this.UserId = "Unknown"
+	if baseController.UserId == "" {
+		baseController.UserId = "Unknown"
 	}
 
-	err := this.Service.Prepare()
+	err := baseController.Service.Prepare()
 	if err != nil {
-		tracelog.ERRORf(err, this.UserId, "BaseController.Prepare", this.Ctx.Request.URL.Path)
-		this.ServeError(err)
+		tracelog.ERRORf(err, baseController.UserId, "BaseController.Prepare", baseController.Ctx.Request.URL.Path)
+		baseController.ServeError(err)
 		return
 	}
 
-	tracelog.TRACE(this.UserId, "BaseController.Prepare", "UserId[%s] Path[%s]", this.UserId, this.Ctx.Request.URL.Path)
+	tracelog.TRACE(baseController.UserId, "BaseController.Prepare", "UserId[%s] Path[%s]", baseController.UserId, baseController.Ctx.Request.URL.Path)
 }
 
-// Finish is called once the controller method completes
-func (this *BaseController) Finish() {
+// Finish is called once the baseController method completes
+func (baseController *BaseController) Finish() {
 	defer func() {
-		if this.MongoSession != nil {
-			mongo.CloseSession(this.UserId, this.MongoSession)
-			this.MongoSession = nil
+		if baseController.MongoSession != nil {
+			mongo.CloseSession(baseController.UserId, baseController.MongoSession)
+			baseController.MongoSession = nil
 		}
 	}()
 
-	tracelog.COMPLETEDf(this.UserId, "Finish", this.Ctx.Request.URL.Path)
+	tracelog.COMPLETEDf(baseController.UserId, "Finish", baseController.Ctx.Request.URL.Path)
 }
 
 //** VALIDATION
 
 // ParseAndValidate will run the params through the validation framework and then
 // response with the specified localized or provided message
-func (this *BaseController) ParseAndValidate(params interface{}) bool {
-	err := this.ParseForm(params)
+func (baseController *BaseController) ParseAndValidate(params interface{}) bool {
+	err := baseController.ParseForm(params)
 	if err != nil {
-		this.ServeError(err)
+		baseController.ServeError(err)
 		return false
 	}
 
 	valid := validation.Validation{}
 	ok, err := valid.Valid(params)
 	if err != nil {
-		this.ServeError(err)
+		baseController.ServeError(err)
 		return false
 	}
 
@@ -114,7 +114,7 @@ func (this *BaseController) ParseAndValidate(params interface{}) bool {
 			errors = append(errors, err.Message)
 		}
 
-		this.ServeValidationErrors(errors)
+		baseController.ServeValidationErrors(errors)
 		return false
 	}
 
@@ -124,41 +124,41 @@ func (this *BaseController) ParseAndValidate(params interface{}) bool {
 //** EXCEPTIONS
 
 // ServeError prepares and serves an error exception
-func (this *BaseController) ServeError(err error) {
-	this.Data["json"] = struct {
+func (baseController *BaseController) ServeError(err error) {
+	baseController.Data["json"] = struct {
 		Error string `json:"error"`
 	}{err.Error()}
-	this.Ctx.Output.SetStatus(500)
-	this.ServeJson()
+	baseController.Ctx.Output.SetStatus(500)
+	baseController.ServeJson()
 }
 
 // ServeValidationErrors prepares and serves a validation exception
-func (this *BaseController) ServeValidationErrors(errors []string) {
-	this.Data["json"] = struct {
+func (baseController *BaseController) ServeValidationErrors(errors []string) {
+	baseController.Data["json"] = struct {
 		Errors []string `json:"errors"`
 	}{errors}
-	this.Ctx.Output.SetStatus(409)
-	this.ServeJson()
+	baseController.Ctx.Output.SetStatus(409)
+	baseController.ServeJson()
 }
 
 //** CATCHING PANICS
 
 // CatchPanic is used to catch any Panic and log exceptions. Returns a 500 as the response
-func (this *BaseController) CatchPanic(functionName string) {
+func (baseController *BaseController) CatchPanic(functionName string) {
 	if r := recover(); r != nil {
 		buf := make([]byte, 10000)
 		runtime.Stack(buf, false)
 
-		tracelog.WARN(this.Service.UserId, functionName, "PANIC Defered [%v] : Stack Trace : %v", r, string(buf))
+		tracelog.WARN(baseController.Service.UserId, functionName, "PANIC Defered [%v] : Stack Trace : %v", r, string(buf))
 
-		this.ServeError(fmt.Errorf("%v", r))
+		baseController.ServeError(fmt.Errorf("%v", r))
 	}
 }
 
 //** AJAX SUPPORT
 
 // AjaxResponse returns a standard ajax response
-func (this *BaseController) AjaxResponse(resultCode int, resultString string, data interface{}) {
+func (baseController *BaseController) AjaxResponse(resultCode int, resultString string, data interface{}) {
 	response := struct {
 		Result       int
 		ResultString string
@@ -169,6 +169,6 @@ func (this *BaseController) AjaxResponse(resultCode int, resultString string, da
 		ResultObject: data,
 	}
 
-	this.Data["json"] = response
-	this.ServeJson()
+	baseController.Data["json"] = response
+	baseController.ServeJson()
 }
