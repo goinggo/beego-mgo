@@ -29,7 +29,7 @@ type (
 func (service *Service) Prepare() (err error) {
 	service.MongoSession, err = mongo.CopyMonotonicSession(service.UserId)
 	if err != nil {
-		tracelog.ERROR(err, service.UserId, "Service.Prepare")
+		tracelog.Error(err, service.UserId, "Service.Prepare")
 		return err
 	}
 

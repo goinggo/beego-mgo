@@ -21,10 +21,10 @@ func main() {
 	tracelog.Start(tracelog.LEVEL_TRACE)
 
 	// Init mongo
-	tracelog.STARTED("main", "Initializing Mongo")
+	tracelog.Started("main", "Initializing Mongo")
 	err := mongo.Startup(helper.MAIN_GO_ROUTINE)
 	if err != nil {
-		tracelog.COMPLETED_ERROR(err, helper.MAIN_GO_ROUTINE, "initApp")
+		tracelog.CompletedError(err, helper.MAIN_GO_ROUTINE, "initApp")
 		os.Exit(1)
 	}
 
@@ -33,6 +33,6 @@ func main() {
 
 	beego.Run()
 
-	tracelog.STARTED(helper.MAIN_GO_ROUTINE, "Website Shutdown")
+	tracelog.Completed(helper.MAIN_GO_ROUTINE, "Website Shutdown")
 	tracelog.Stop()
 }

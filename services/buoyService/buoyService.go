@@ -39,7 +39,7 @@ func init() {
 	// Pull in the configuration
 	err := envconfig.Process("buoy", &Config)
 	if err != nil {
-		tracelog.COMPLETED_ERROR(err, helper.MAIN_GO_ROUTINE, "Init")
+		tracelog.CompletedError(err, helper.MAIN_GO_ROUTINE, "Init")
 	}
 }
 
@@ -49,27 +49,27 @@ func init() {
 func FindStation(service *services.Service, stationId string) (buoyStation *buoyModels.BuoyStation, err error) {
 	defer helper.CatchPanic(&err, service.UserId, "FindStation")
 
-	tracelog.STARTED(service.UserId, "FindStation")
+	tracelog.Started(service.UserId, "FindStation")
 
 	queryMap := bson.M{"station_id": stationId}
 
 	buoyStation = &buoyModels.BuoyStation{}
 	err = service.DBAction(Config.Database, "buoy_stations",
 		func(collection *mgo.Collection) error {
-			tracelog.TRACE(service.UserId, "FindStation", "Query : %s", mongo.ToString(queryMap))
+			tracelog.Trace(service.UserId, "FindStation", "Query : %s", mongo.ToString(queryMap))
 			return collection.Find(queryMap).One(buoyStation)
 		})
 
 	if err != nil {
 		if strings.Contains(err.Error(), "not found") == false {
-			tracelog.COMPLETED_ERROR(err, service.UserId, "FindStation")
+			tracelog.CompletedError(err, service.UserId, "FindStation")
 			return buoyStation, err
 		}
 
 		err = nil
 	}
 
-	tracelog.COMPLETED(service.UserId, "FindStation")
+	tracelog.Completed(service.UserId, "FindStation")
 	return buoyStation, err
 }
 
@@ -77,22 +77,22 @@ func FindStation(service *services.Service, stationId string) (buoyStation *buoy
 func FindRegion(service *services.Service, region string) (buoyStations []*buoyModels.BuoyStation, err error) {
 	defer helper.CatchPanic(&err, service.UserId, "FindRegion")
 
-	tracelog.STARTED(service.UserId, "FindRegion")
+	tracelog.Started(service.UserId, "FindRegion")
 
 	queryMap := bson.M{"region": region}
 
 	buoyStations = []*buoyModels.BuoyStation{}
 	err = service.DBAction(Config.Database, "buoy_stations",
 		func(collection *mgo.Collection) error {
-			tracelog.TRACE(service.UserId, "FindRegion", "Query : %s", mongo.ToString(queryMap))
+			tracelog.Trace(service.UserId, "FindRegion", "Query : %s", mongo.ToString(queryMap))
 			return collection.Find(queryMap).All(&buoyStations)
 		})
 
 	if err != nil {
-		tracelog.COMPLETED_ERROR(err, service.UserId, "FindRegion")
+		tracelog.CompletedError(err, service.UserId, "FindRegion")
 		return buoyStations, err
 	}
 
-	tracelog.COMPLETED(service.UserId, "FindRegion")
+	tracelog.Completed(service.UserId, "FindRegion")
 	return buoyStations, err
 }

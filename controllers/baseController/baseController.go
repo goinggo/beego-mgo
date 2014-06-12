@@ -44,12 +44,12 @@ func (baseController *BaseController) Prepare() {
 
 	err := baseController.Service.Prepare()
 	if err != nil {
-		tracelog.ERRORf(err, baseController.UserId, "BaseController.Prepare", baseController.Ctx.Request.URL.Path)
+		tracelog.Errorf(err, baseController.UserId, "BaseController.Prepare", baseController.Ctx.Request.URL.Path)
 		baseController.ServeError(err)
 		return
 	}
 
-	tracelog.TRACE(baseController.UserId, "BaseController.Prepare", "UserId[%s] Path[%s]", baseController.UserId, baseController.Ctx.Request.URL.Path)
+	tracelog.Trace(baseController.UserId, "BaseController.Prepare", "UserId[%s] Path[%s]", baseController.UserId, baseController.Ctx.Request.URL.Path)
 }
 
 // Finish is called once the baseController method completes
@@ -61,7 +61,7 @@ func (baseController *BaseController) Finish() {
 		}
 	}()
 
-	tracelog.COMPLETEDf(baseController.UserId, "Finish", baseController.Ctx.Request.URL.Path)
+	tracelog.Completedf(baseController.UserId, "Finish", baseController.Ctx.Request.URL.Path)
 }
 
 //** VALIDATION
@@ -83,38 +83,38 @@ func (baseController *BaseController) ParseAndValidate(params interface{}) bool 
 	}
 
 	if ok == false {
-		// Build a map of the error messages for each field
+		// Build a map of the Error messages for each field
 		messages2 := map[string]string{}
 		val := reflect.ValueOf(params).Elem()
 		for i := 0; i < val.NumField(); i++ {
-			// Look for an error tag in the field
+			// Look for an Error tag in the field
 			typeField := val.Type().Field(i)
 			tag := typeField.Tag
-			tagValue := tag.Get("error")
+			tagValue := tag.Get("Error")
 
-			// Was there an error tag
+			// Was there an Error tag
 			if tagValue != "" {
 				messages2[typeField.Name] = tagValue
 			}
 		}
 
-		// Build the error response
-		errors := []string{}
+		// Build the Error response
+		Errors := []string{}
 		for _, err := range valid.Errors {
-			// Match an error from the validation framework errors
+			// Match an Error from the validation framework Errors
 			// to a field name we have a mapping for
 			message, ok := messages2[err.Field]
 			if ok == true {
 				// Use a localized message if one exists
-				errors = append(errors, localize.T(message))
+				Errors = append(Errors, localize.T(message))
 				continue
 			}
 
 			// No match, so use the message as is
-			errors = append(errors, err.Message)
+			Errors = append(Errors, err.Message)
 		}
 
-		baseController.ServeValidationErrors(errors)
+		baseController.ServeValidationErrors(Errors)
 		return false
 	}
 
@@ -123,20 +123,20 @@ func (baseController *BaseController) ParseAndValidate(params interface{}) bool 
 
 //** EXCEPTIONS
 
-// ServeError prepares and serves an error exception
+// ServeError prepares and serves an Error exception
 func (baseController *BaseController) ServeError(err error) {
 	baseController.Data["json"] = struct {
-		Error string `json:"error"`
+		Error string `json:"Error"`
 	}{err.Error()}
 	baseController.Ctx.Output.SetStatus(500)
 	baseController.ServeJson()
 }
 
 // ServeValidationErrors prepares and serves a validation exception
-func (baseController *BaseController) ServeValidationErrors(errors []string) {
+func (baseController *BaseController) ServeValidationErrors(Errors []string) {
 	baseController.Data["json"] = struct {
-		Errors []string `json:"errors"`
-	}{errors}
+		Errors []string `json:"Errors"`
+	}{Errors}
 	baseController.Ctx.Output.SetStatus(409)
 	baseController.ServeJson()
 }
@@ -149,7 +149,7 @@ func (baseController *BaseController) CatchPanic(functionName string) {
 		buf := make([]byte, 10000)
 		runtime.Stack(buf, false)
 
-		tracelog.WARN(baseController.Service.UserId, functionName, "PANIC Defered [%v] : Stack Trace : %v", r, string(buf))
+		tracelog.Warning(baseController.Service.UserId, functionName, "PANIC Defered [%v] : Stack Trace : %v", r, string(buf))
 
 		baseController.ServeError(fmt.Errorf("%v", r))
 	}

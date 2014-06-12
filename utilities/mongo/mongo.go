@@ -71,13 +71,13 @@ func Startup(sessionId string) (err error) {
 		return err
 	}
 
-	tracelog.STARTED(sessionId, "Startup")
+	tracelog.Started(sessionId, "Startup")
 
 	// Pull in the configuration
 	config := mongoConfiguration{}
 	err = envconfig.Process("mgo", &config)
 	if err != nil {
-		tracelog.COMPLETED_ERROR(err, sessionId, "Startup")
+		tracelog.CompletedError(err, sessionId, "Startup")
 		return err
 	}
 
@@ -87,9 +87,9 @@ func Startup(sessionId string) (err error) {
 	}
 
 	// Log the mongodb connection straps
-	tracelog.TRACE(sessionId, "Startup", "MongoDB : Hosts[%s]", config.Hosts)
-	tracelog.TRACE(sessionId, "Startup", "MongoDB : Database[%s]", config.Database)
-	tracelog.TRACE(sessionId, "Startup", "MongoDB : Username[%s]", config.UserName)
+	tracelog.Trace(sessionId, "Startup", "MongoDB : Hosts[%s]", config.Hosts)
+	tracelog.Trace(sessionId, "Startup", "MongoDB : Database[%s]", config.Database)
+	tracelog.Trace(sessionId, "Startup", "MongoDB : Username[%s]", config.UserName)
 
 	hosts := strings.Split(config.Hosts, ",")
 
@@ -97,7 +97,7 @@ func Startup(sessionId string) (err error) {
 	err = CreateSession(sessionId, "strong", MASTER_SESSION, hosts, config.Database, config.UserName, config.Password)
 	err = CreateSession(sessionId, "monotonic", MONOTONIC_SESSION, hosts, config.Database, config.UserName, config.Password)
 
-	tracelog.COMPLETED(sessionId, "Startup")
+	tracelog.Completed(sessionId, "Startup")
 	return err
 }
 
@@ -105,14 +105,14 @@ func Startup(sessionId string) (err error) {
 func Shutdown(sessionId string) (err error) {
 	defer helper.CatchPanic(&err, sessionId, "Shutdown")
 
-	tracelog.STARTED(sessionId, "Shutdown")
+	tracelog.Started(sessionId, "Shutdown")
 
 	// Close the databases
 	for _, session := range singleton.sessions {
 		CloseSession(sessionId, session.mongoSession)
 	}
 
-	tracelog.COMPLETED(sessionId, "Shutdown")
+	tracelog.Completed(sessionId, "Shutdown")
 	return err
 }
 
@@ -120,7 +120,7 @@ func Shutdown(sessionId string) (err error) {
 func CreateSession(sessionId string, mode string, sessionName string, hosts []string, databaseName string, username string, password string) (err error) {
 	defer helper.CatchPanic(nil, sessionId, "CreateSession")
 
-	tracelog.STARTEDf(sessionId, "CreateSession", "Mode[%s] SessionName[%s] Hosts[%s] DatabaseName[%s] Username[%s]", mode, sessionName, hosts, databaseName, username)
+	tracelog.Startedf(sessionId, "CreateSession", "Mode[%s] SessionName[%s] Hosts[%s] DatabaseName[%s] Username[%s]", mode, sessionName, hosts, databaseName, username)
 
 	// Create the database object
 	mongoSession := &mongoSession{
@@ -136,7 +136,7 @@ func CreateSession(sessionId string, mode string, sessionName string, hosts []st
 	// Establish the master session
 	mongoSession.mongoSession, err = mgo.DialWithInfo(mongoSession.mongoDBDialInfo)
 	if err != nil {
-		tracelog.COMPLETED_ERROR(err, sessionId, "CreateSession")
+		tracelog.CompletedError(err, sessionId, "CreateSession")
 		return err
 	}
 
@@ -165,7 +165,7 @@ func CreateSession(sessionId string, mode string, sessionName string, hosts []st
 	// Add the database to the map
 	singleton.sessions[sessionName] = mongoSession
 
-	tracelog.COMPLETED(sessionId, "CreateSession")
+	tracelog.Completed(sessionId, "CreateSession")
 	return err
 }
 
@@ -183,21 +183,21 @@ func CopyMonotonicSession(sessionId string) (*mgo.Session, error) {
 func CopySession(sessionId string, useSession string) (mongoSession *mgo.Session, err error) {
 	defer helper.CatchPanic(nil, sessionId, "CopySession")
 
-	tracelog.STARTEDf(sessionId, "CopySession", "UseSession[%s]", useSession)
+	tracelog.Startedf(sessionId, "CopySession", "UseSession[%s]", useSession)
 
 	// Find the session object
 	session := singleton.sessions[useSession]
 
 	if session == nil {
 		err = fmt.Errorf("Unable To Locate Session %s", useSession)
-		tracelog.COMPLETED_ERROR(err, sessionId, "CopySession")
+		tracelog.CompletedError(err, sessionId, "CopySession")
 		return mongoSession, err
 	}
 
 	// Copy the master session
 	mongoSession = session.mongoSession.Copy()
 
-	tracelog.COMPLETED(sessionId, "CopySession")
+	tracelog.Completed(sessionId, "CopySession")
 	return mongoSession, err
 }
 
@@ -215,21 +215,21 @@ func CloneMonotonicSession(sessionId string) (*mgo.Session, error) {
 func CloneSession(sessionId string, useSession string) (mongoSession *mgo.Session, err error) {
 	defer helper.CatchPanic(nil, sessionId, "CopySession")
 
-	tracelog.STARTEDf(sessionId, "CloneSession", "UseSession[%s]", useSession)
+	tracelog.Startedf(sessionId, "CloneSession", "UseSession[%s]", useSession)
 
 	// Find the session object
 	session := singleton.sessions[useSession]
 
 	if session == nil {
 		err = fmt.Errorf("Unable To Locate Session %s", useSession)
-		tracelog.COMPLETED_ERROR(err, sessionId, "CloneSession")
+		tracelog.CompletedError(err, sessionId, "CloneSession")
 		return mongoSession, err
 	}
 
 	// Clone the master session
 	mongoSession = session.mongoSession.Clone()
 
-	tracelog.COMPLETED(sessionId, "CloneSession")
+	tracelog.Completed(sessionId, "CloneSession")
 	return mongoSession, err
 }
 
@@ -237,11 +237,9 @@ func CloneSession(sessionId string, useSession string) (mongoSession *mgo.Sessio
 func CloseSession(sessionId string, mongoSession *mgo.Session) {
 	defer helper.CatchPanic(nil, sessionId, "CloseSession")
 
-	tracelog.STARTED(sessionId, "CloseSession")
-
+	tracelog.Started(sessionId, "CloseSession")
 	mongoSession.Close()
-
-	tracelog.COMPLETED(sessionId, "CloseSession")
+	tracelog.Completed(sessionId, "CloseSession")
 }
 
 // GetCollection returns a reference to a collection for the specified database and collection name
@@ -278,24 +276,24 @@ func ToString(queryMap bson.M) string {
 
 // Execute the MongoDB literal function
 func Execute(sessionId string, mongoSession *mgo.Session, databaseName string, collectionName string, mongoCall MongoCall) (err error) {
-	tracelog.STARTEDf(sessionId, "Execute", "Database[%s] Collection[%s]", databaseName, collectionName)
+	tracelog.Startedf(sessionId, "Execute", "Database[%s] Collection[%s]", databaseName, collectionName)
 
 	// Capture the specified collection
 	collection, err := GetCollection(mongoSession, databaseName, collectionName)
 	if err != nil {
 
-		tracelog.COMPLETED_ERROR(err, sessionId, "Execute")
+		tracelog.CompletedError(err, sessionId, "Execute")
 		return err
 	}
 
 	// Execute the mongo call
 	err = mongoCall(collection)
 	if err != nil {
-		tracelog.COMPLETED_ERROR(err, sessionId, "Execute")
+		tracelog.CompletedError(err, sessionId, "Execute")
 		return err
 	}
 
-	tracelog.COMPLETED(sessionId, "Execute")
+	tracelog.Completed(sessionId, "Execute")
 
 	return err
 }

@@ -24,11 +24,11 @@ type BuoyController struct {
 // Index is the initial view for the buoy system
 func (controller *BuoyController) Index() {
 	region := "Gulf Of Mexico"
-	tracelog.STARTEDf(controller.UserId, "BuoyController.Index", "Region[%s]", region)
+	tracelog.Startedf(controller.UserId, "BuoyController.Index", "Region[%s]", region)
 
 	buoyStations, err := buoyService.FindRegion(&controller.Service, region)
 	if err != nil {
-		tracelog.COMPLETED_ERRORf(err, controller.UserId, "BuoyController.Index", "Region[%s]", region)
+		tracelog.CompletedErrorf(err, controller.UserId, "BuoyController.Index", "Region[%s]", region)
 		controller.ServeError(err)
 		return
 	}
@@ -56,7 +56,7 @@ func (controller *BuoyController) RetrieveStation() {
 
 	buoyStation, err := buoyService.FindStation(&controller.Service, params.StationId)
 	if err != nil {
-		tracelog.COMPLETED_ERRORf(err, controller.UserId, "BuoyController.RetrieveStation", "StationId[%s]", params.StationId)
+		tracelog.CompletedErrorf(err, controller.UserId, "BuoyController.RetrieveStation", "StationId[%s]", params.StationId)
 		controller.ServeError(err)
 		return
 	}
@@ -82,7 +82,7 @@ func (controller *BuoyController) RetrieveStationJson() {
 
 	buoyStation, err := buoyService.FindStation(&controller.Service, params.StationId)
 	if err != nil {
-		tracelog.COMPLETED_ERRORf(err, controller.UserId, "Station", "StationId[%s]", params.StationId)
+		tracelog.CompletedErrorf(err, controller.UserId, "Station", "StationId[%s]", params.StationId)
 		controller.ServeError(err)
 		return
 	}
