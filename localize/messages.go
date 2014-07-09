@@ -9,10 +9,10 @@ import (
 	"os"
 	"path"
 
+	"github.com/goinggo/beego-mgo/go-i18n/i18n"
+	"github.com/goinggo/beego-mgo/go-i18n/i18n/locale"
+	"github.com/goinggo/beego-mgo/go-i18n/i18n/translation"
 	"github.com/goinggo/tracelog"
-	"github.com/nicksnyder/go-i18n/i18n"
-	"github.com/nicksnyder/go-i18n/i18n/locale"
-	"github.com/nicksnyder/go-i18n/i18n/translation"
 )
 
 var (
