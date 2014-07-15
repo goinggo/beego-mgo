@@ -1,3 +1,8 @@
+// Copyright 2013 Ardan Studios. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE handle.
+
+// Package serviceTests implements tests for the buoy services.
 package serviceTests
 
 import (
@@ -11,16 +16,16 @@ func Test_Station(t *testing.T) {
 	service := Prepare()
 	defer Finish(service)
 
-	stationId := "42002"
+	stationID := "42002"
 
-	buoyStation, err := buoyService.FindStation(service, stationId)
+	buoyStation, err := buoyService.FindStation(service, stationID)
 
 	Convey("Subject: Test Station Service", t, func() {
 		Convey("Should Be Able To Perform A Search", func() {
 			So(err, ShouldEqual, nil)
 		})
 		Convey("Should Have Station Data", func() {
-			So(buoyStation.StationId, ShouldEqual, stationId)
+			So(buoyStation.StationID, ShouldEqual, stationID)
 		})
 	})
 }

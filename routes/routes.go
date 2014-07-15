@@ -2,9 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE handle.
 
-/*
-	Initializes the routes for the web service
-*/
+// Package routes initializes the routes for the web service.
 package routes
 
 import (
@@ -13,7 +11,7 @@ import (
 )
 
 func init() {
-	beego.Router("/", &controllers.BuoyController{}, "get:Index")
-	beego.Router("/buoy/retrievestation", &controllers.BuoyController{}, "post:RetrieveStation")
-	beego.Router("/buoy/station/:stationId", &controllers.BuoyController{}, "get,post:RetrieveStationJson")
+	beego.Router("/", new(controllers.BuoyController), "get:Index")
+	beego.Router("/buoy/retrievestation", new(controllers.BuoyController), "post:RetrieveStation")
+	beego.Router("/buoy/station/:stationId", new(controllers.BuoyController), "get,post:RetrieveStationJSON")
 }

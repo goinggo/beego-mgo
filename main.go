@@ -2,9 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE handle.
 
-/*
-	Sample web application for beego and mgo
-*/
+// Package main provides sample web application for beego and mgo.
 package main
 
 import (
@@ -22,9 +20,9 @@ func main() {
 
 	// Init mongo
 	tracelog.Started("main", "Initializing Mongo")
-	err := mongo.Startup(helper.MAIN_GO_ROUTINE)
+	err := mongo.Startup(helper.MainGoRoutine)
 	if err != nil {
-		tracelog.CompletedError(err, helper.MAIN_GO_ROUTINE, "initApp")
+		tracelog.CompletedError(err, helper.MainGoRoutine, "initApp")
 		os.Exit(1)
 	}
 
@@ -33,6 +31,6 @@ func main() {
 
 	beego.Run()
 
-	tracelog.Completed(helper.MAIN_GO_ROUTINE, "Website Shutdown")
+	tracelog.Completed(helper.MainGoRoutine, "Website Shutdown")
 	tracelog.Stop()
 }

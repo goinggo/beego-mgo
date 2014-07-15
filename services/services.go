@@ -2,9 +2,7 @@
 // Use of service source code is governed by a BSD-style
 // license that can be found in the LICENSE handle.
 
-/*
-	Implements boilerplate code for all services
-*/
+// Package services implements boilerplate code for all services.
 package services
 
 import (
@@ -17,37 +15,39 @@ import (
 //** TYPES
 
 type (
-	// Services contains common properties
+	// Service contains common properties for all services.
 	Service struct {
 		MongoSession *mgo.Session
-		UserId       string
+		UserID       string
 	}
 )
 
 //** PUBLIC FUNCTIONS
 
+// Prepare is called before any controller.
 func (service *Service) Prepare() (err error) {
-	service.MongoSession, err = mongo.CopyMonotonicSession(service.UserId)
+	service.MongoSession, err = mongo.CopyMonotonicSession(service.UserID)
 	if err != nil {
-		tracelog.Error(err, service.UserId, "Service.Prepare")
+		tracelog.Error(err, service.UserID, "Service.Prepare")
 		return err
 	}
 
 	return err
 }
 
+// Finish is called after the controller.
 func (service *Service) Finish() (err error) {
-	defer helper.CatchPanic(&err, service.UserId, "Service.Finish")
+	defer helper.CatchPanic(&err, service.UserID, "Service.Finish")
 
 	if service.MongoSession != nil {
-		mongo.CloseSession(service.UserId, service.MongoSession)
+		mongo.CloseSession(service.UserID, service.MongoSession)
 		service.MongoSession = nil
 	}
 
 	return err
 }
 
-// Execute the MongoDB literal function
-func (service *Service) DBAction(databaseName string, collectionName string, mongoCall mongo.MongoCall) (err error) {
-	return mongo.Execute(service.UserId, service.MongoSession, databaseName, collectionName, mongoCall)
+// DBAction executes the MongoDB literal function
+func (service *Service) DBAction(databaseName string, collectionName string, dbCall mongo.DBCall) (err error) {
+	return mongo.Execute(service.UserID, service.MongoSession, databaseName, collectionName, dbCall)
 }

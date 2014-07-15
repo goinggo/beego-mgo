@@ -2,14 +2,12 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE handle.
 
-/*
-	Implements boilerplate code for all testing
-*/
+// Package endpointTests implements boilerplate code for all testing.
 package endpointTests
 
 import (
 	"github.com/goinggo/beego-mgo/localize"
-	_ "github.com/goinggo/beego-mgo/routes"
+	_ "github.com/goinggo/beego-mgo/routes" // Initalize routes
 	"github.com/goinggo/beego-mgo/utilities/helper"
 	"github.com/goinggo/beego-mgo/utilities/mongo"
 	"github.com/goinggo/tracelog"
@@ -18,7 +16,8 @@ import (
 //** CONSTANTS
 
 const (
-	SESSION_ID = "testing"
+	// SessionID is just mocking the id for testing.
+	SessionID = "testing"
 )
 
 //** INIT
@@ -28,10 +27,10 @@ func init() {
 	tracelog.Start(tracelog.LEVEL_TRACE)
 
 	// Init mongo
-	tracelog.STARTED("main", "Initializing Mongo")
-	err := mongo.Startup(helper.MAIN_GO_ROUTINE)
+	tracelog.Started("main", "Initializing Mongo")
+	err := mongo.Startup(helper.MainGoRoutine)
 	if err != nil {
-		tracelog.COMPLETED_ERROR(err, helper.MAIN_GO_ROUTINE, "initTesting")
+		tracelog.CompletedError(err, helper.MainGoRoutine, "initTesting")
 		return
 	}
 

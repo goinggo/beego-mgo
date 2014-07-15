@@ -2,9 +2,7 @@
 // Use of controller source code is governed by a BSD-style
 // license that can be found in the LICENSE handle.
 
-/*
-	Implements the controller layer for buoy
-*/
+// Package controllers implements the controller layer for the buoy API.
 package controllers
 
 import (
@@ -15,20 +13,21 @@ import (
 
 //** TYPES
 
+// BuoyController manages the API for buoy related functionality.
 type BuoyController struct {
 	bc.BaseController
 }
 
 //** WEB FUNCTIONS
 
-// Index is the initial view for the buoy system
+// Index is the initial view for the buoy system.
 func (controller *BuoyController) Index() {
 	region := "Gulf Of Mexico"
-	tracelog.Startedf(controller.UserId, "BuoyController.Index", "Region[%s]", region)
+	tracelog.Startedf(controller.UserID, "BuoyController.Index", "Region[%s]", region)
 
 	buoyStations, err := buoyService.FindRegion(&controller.Service, region)
 	if err != nil {
-		tracelog.CompletedErrorf(err, controller.UserId, "BuoyController.Index", "Region[%s]", region)
+		tracelog.CompletedErrorf(err, controller.UserID, "BuoyController.Index", "Region[%s]", region)
 		controller.ServeError(err)
 		return
 	}
@@ -44,19 +43,19 @@ func (controller *BuoyController) Index() {
 
 //** AJAX FUNCTIONS
 
-// RetrieveStation handles the example 2 tab
+// RetrieveStation handles the example 2 tab.
 func (controller *BuoyController) RetrieveStation() {
-	params := struct {
-		StationId string `form:"stationId" valid:"Required; MinSize(4)" error:"invalid_station_id"`
-	}{}
+	var params struct {
+		StationID string `form:"stationID" valid:"Required; MinSize(4)" error:"invalid_station_id"`
+	}
 
 	if controller.ParseAndValidate(&params) == false {
 		return
 	}
 
-	buoyStation, err := buoyService.FindStation(&controller.Service, params.StationId)
+	buoyStation, err := buoyService.FindStation(&controller.Service, params.StationID)
 	if err != nil {
-		tracelog.CompletedErrorf(err, controller.UserId, "BuoyController.RetrieveStation", "StationId[%s]", params.StationId)
+		tracelog.CompletedErrorf(err, controller.UserID, "BuoyController.RetrieveStation", "StationID[%s]", params.StationID)
 		controller.ServeError(err)
 		return
 	}
@@ -69,24 +68,25 @@ func (controller *BuoyController) RetrieveStation() {
 	controller.AjaxResponse(0, "SUCCESS", view)
 }
 
-// Stations handles the example 3 tab
+// RetrieveStationJSON handles the example 3 tab.
 // http://localhost:9003/buoy/station/42002
-func (controller *BuoyController) RetrieveStationJson() {
+func (controller *BuoyController) RetrieveStationJSON() {
+	// The call to ParseForm inside of ParseAndValidate is failing. This is a BAD FIX
 	params := struct {
-		StationId string `form:":stationId" valid:"Required; MinSize(4)" error:"invalid_station_id"`
-	}{}
+		StationID string `form:":stationId" valid:"Required; MinSize(4)" error:"invalid_station_id"`
+	}{controller.GetString(":stationId")}
 
 	if controller.ParseAndValidate(&params) == false {
 		return
 	}
 
-	buoyStation, err := buoyService.FindStation(&controller.Service, params.StationId)
+	buoyStation, err := buoyService.FindStation(&controller.Service, params.StationID)
 	if err != nil {
-		tracelog.CompletedErrorf(err, controller.UserId, "Station", "StationId[%s]", params.StationId)
+		tracelog.CompletedErrorf(err, controller.UserID, "Station", "StationID[%s]", params.StationID)
 		controller.ServeError(err)
 		return
 	}
 
-	controller.Data["json"] = &buoyStation
+	controller.Data["json"] = buoyStation
 	controller.ServeJson()
 }

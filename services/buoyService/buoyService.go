@@ -2,9 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE handle.
 
-/*
-	Buoy implements the service for the buoy functionality
-*/
+// Package buoyService implements the service for the buoy functionality.
 package buoyService
 
 import (
@@ -23,7 +21,7 @@ import (
 //** TYPES
 
 type (
-	// buoyConfiguration contains settings for running the buoy service
+	// buoyConfiguration contains settings for running the buoy service.
 	buoyConfiguration struct {
 		Database string
 	}
@@ -31,68 +29,58 @@ type (
 
 //** PACKAGE VARIABLES
 
+// Config provides buoy configuration.
 var Config buoyConfiguration
 
 //** INIT
 
 func init() {
-	// Pull in the configuration
-	err := envconfig.Process("buoy", &Config)
-	if err != nil {
-		tracelog.CompletedError(err, helper.MAIN_GO_ROUTINE, "Init")
+	// Pull in the configuration.
+	if err := envconfig.Process("buoy", &Config); err != nil {
+		tracelog.CompletedError(err, helper.MainGoRoutine, "Init")
 	}
 }
 
 //** PUBLIC FUNCTIONS
 
 // FindStation retrieves the specified station
-func FindStation(service *services.Service, stationId string) (buoyStation *buoyModels.BuoyStation, err error) {
-	defer helper.CatchPanic(&err, service.UserId, "FindStation")
+func FindStation(service *services.Service, stationID string) (*buoyModels.BuoyStation, error) {
+	tracelog.Startedf(service.UserID, "FindStation", "stationID[%s]", stationID)
 
-	tracelog.Started(service.UserId, "FindStation")
-
-	queryMap := bson.M{"station_id": stationId}
-
-	buoyStation = &buoyModels.BuoyStation{}
-	err = service.DBAction(Config.Database, "buoy_stations",
+	var buoyStation buoyModels.BuoyStation
+	if err := service.DBAction(Config.Database, "buoy_stations",
 		func(collection *mgo.Collection) error {
-			tracelog.Trace(service.UserId, "FindStation", "Query : %s", mongo.ToString(queryMap))
-			return collection.Find(queryMap).One(buoyStation)
-		})
+			queryMap := bson.M{"station_id": stationID}
 
-	if err != nil {
+			tracelog.Trace(service.UserID, "FindStation", "MGO : db.buoy_stations.find(%s).limit(1)", mongo.ToString(queryMap))
+			return collection.Find(queryMap).One(&buoyStation)
+		}); err != nil {
 		if strings.Contains(err.Error(), "not found") == false {
-			tracelog.CompletedError(err, service.UserId, "FindStation")
-			return buoyStation, err
+			tracelog.CompletedError(err, service.UserID, "FindStation")
+			return nil, err
 		}
-
-		err = nil
 	}
 
-	tracelog.Completed(service.UserId, "FindStation")
-	return buoyStation, err
+	tracelog.Completedf(service.UserID, "FindStation", "buoyStation%+v", &buoyStation)
+	return &buoyStation, nil
 }
 
 // FindRegion retrieves the stations for the specified region
-func FindRegion(service *services.Service, region string) (buoyStations []*buoyModels.BuoyStation, err error) {
-	defer helper.CatchPanic(&err, service.UserId, "FindRegion")
+func FindRegion(service *services.Service, region string) ([]buoyModels.BuoyStation, error) {
+	tracelog.Startedf(service.UserID, "FindRegion", "region[%s]", region)
 
-	tracelog.Started(service.UserId, "FindRegion")
-
-	queryMap := bson.M{"region": region}
-
-	buoyStations = []*buoyModels.BuoyStation{}
-	err = service.DBAction(Config.Database, "buoy_stations",
+	var buoyStations []buoyModels.BuoyStation
+	if err := service.DBAction(Config.Database, "buoy_stations",
 		func(collection *mgo.Collection) error {
-			tracelog.Trace(service.UserId, "FindRegion", "Query : %s", mongo.ToString(queryMap))
-			return collection.Find(queryMap).All(&buoyStations)
-		})
+			queryMap := bson.M{"region": region}
 
-	if err != nil {
-		tracelog.CompletedError(err, service.UserId, "FindRegion")
-		return buoyStations, err
+			tracelog.Trace(service.UserID, "FindRegion", "Query : db.buoy_stations.find(%s)", mongo.ToString(queryMap))
+			return collection.Find(queryMap).All(&buoyStations)
+		}); err != nil {
+		tracelog.CompletedError(err, service.UserID, "FindRegion")
+		return nil, err
 	}
 
-	tracelog.Completed(service.UserId, "FindRegion")
-	return buoyStations, err
+	tracelog.Completedf(service.UserID, "FindRegion", "buoyStations%+v", buoyStations)
+	return buoyStations, nil
 }

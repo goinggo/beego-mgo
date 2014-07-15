@@ -1,5 +1,4 @@
-// The localize package provides support for handling different languages
-// and cultures
+// Package localize : messages.go package provides support for handling different languages and cultures
 package localize
 
 import (
@@ -22,19 +21,18 @@ var (
 
 // Init initializes the local environment
 func Init(defaultLocale string) error {
-	tracelog.Startedf("localize", "Init", "DefaultLocal[%s]", defaultLocale)
+	tracelog.Startedf("localize", "Init", "defaultLocal[%s]", defaultLocale)
 
 	switch defaultLocale {
 	case "en-US":
-		LoadJSON(defaultLocale, En_US)
+		LoadJSON(defaultLocale, EnUS)
 	default:
 		return fmt.Errorf("Unsupported Locale: %s", defaultLocale)
 	}
 
 	// Obtain the default translation function for use
 	var err error
-	T, err = NewTranslation(defaultLocale, defaultLocale)
-	if err != nil {
+	if T, err = NewTranslation(defaultLocale, defaultLocale); err != nil {
 		return err
 	}
 
@@ -44,23 +42,17 @@ func Init(defaultLocale string) error {
 
 // NewTranslation obtains a translation function object for the
 // specified locales
-func NewTranslation(userLocale string, defaultLocale string) (t i18n.TranslateFunc, err error) {
-	t, err = i18n.Tfunc(userLocale, userLocale)
-	if err != nil {
-		return t, err
-	}
-
-	return t, err
+func NewTranslation(userLocale string, defaultLocale string) (i18n.TranslateFunc, error) {
+	return i18n.Tfunc(userLocale, userLocale)
 }
 
 // LoadJSON takes a json document of translations and manually
 // loads them into the system
 func LoadJSON(userLocale string, translationDocument string) error {
-	tracelog.Startedf("localize", "LoadJSON", "UserLocale[%s] Length[%d]", userLocale, len(translationDocument))
+	tracelog.Startedf("localize", "LoadJSON", "userLocale[%s] length[%d]", userLocale, len(translationDocument))
 
 	tranDocuments := []map[string]interface{}{}
-	err := json.Unmarshal([]byte(translationDocument), &tranDocuments)
-	if err != nil {
+	if err := json.Unmarshal([]byte(translationDocument), &tranDocuments); err != nil {
 		tracelog.CompletedErrorf(err, "localize", "LoadJSON", "**************>")
 		return err
 	}

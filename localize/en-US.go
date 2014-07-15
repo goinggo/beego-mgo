@@ -1,7 +1,8 @@
-// en-US.go provides the localized messages for English in the United States
+// Package localize : en-US.go provides the localized messages for English in the United States
 package localize
 
-var En_US = `[
+// EnUS contains english United States translations.
+var EnUS = `[
 	{
 		"id": "invalid_credentials",
 		"translation": "Invalid Credentials were supplied."

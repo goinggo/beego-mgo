@@ -19,7 +19,7 @@
 					<br />
 					<table class="table table-striped">
 						<tr>
-							<th>Station Id</th>
+							<th>Station ID</th>
 							<th>Name</th>
 							<th>LocDesc</th>
 							<th>Wind Speed</th>
@@ -28,7 +28,7 @@
 						</tr>
 						{{range $index, $val := .Stations}}
 						<tr>
-							<td><a class="detail" data="{{$val.StationId}}" href="#">{{$val.StationId}}</a></td>
+							<td><a class="detail" data="{{$val.StationID}}" href="#">{{$val.StationID}}</a></td>
 							<td>{{$val.Name}}</td>
 							<td>{{$val.LocDesc}}</td>
 							<td>{{$val.Condition.DisplayWindSpeed}}</td>
@@ -48,7 +48,7 @@
 					<br />
 					<select class="selectpicker" data-style="btn-success" id="station-names-json">
 						{{range $index, $val := .Stations}}
-							<option value="{{$val.StationId}}">{{$val.Name}}</option>
+							<option value="{{$val.StationID}}">{{$val.Name}}</option>
 						{{end}}
 					</select>
 					<input class="btn btn-success" id="load-station-button-json" class="button" type="button" value="Own Tab"/>

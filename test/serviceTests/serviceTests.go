@@ -1,3 +1,8 @@
+// Copyright 2013 Ardan Studios. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE handle.
+
+// Package serviceTests implements boilerplate code for all testing
 package serviceTests
 
 import (
@@ -11,7 +16,8 @@ import (
 //** CONSTANTS
 
 const (
-	SESSION_ID = "testing"
+	// SessionID is just mocking the id for testing.
+	SessionID = "testing"
 )
 
 //** TYPES
@@ -30,10 +36,10 @@ func init() {
 	tracelog.Start(tracelog.LEVEL_TRACE)
 
 	// Init mongo
-	tracelog.STARTED("main", "Initializing Mongo")
-	err := mongo.Startup(helper.MAIN_GO_ROUTINE)
+	tracelog.Started("main", "Initializing Mongo")
+	err := mongo.Startup(helper.MainGoRoutine)
 	if err != nil {
-		tracelog.COMPLETED_ERROR(err, helper.MAIN_GO_ROUTINE, "initTesting")
+		tracelog.CompletedError(err, helper.MainGoRoutine, "initTesting")
 		return
 	}
 
@@ -43,24 +49,26 @@ func init() {
 
 //** INTERCEPT FUNCTIONS
 
+// Prepare is called before controllers are called.
 func Prepare() *services.Service {
-	service := &services.Service{}
+	var service services.Service
 
 	// TODO: Add Test User To Environment
-	service.UserId = "testing"
+	service.UserID = "testing"
 
 	err := service.Prepare()
 	if err != nil {
-		tracelog.ERROR(err, service.UserId, "Prepare")
+		tracelog.Error(err, service.UserID, "Prepare")
 		return nil
 	}
 
-	tracelog.TRACE(service.UserId, "Before", "UserId[%s]", service.UserId)
-	return service
+	tracelog.Trace(service.UserID, "Before", "UserID[%s]", service.UserID)
+	return &service
 }
 
+// Finish is called after controllers are called.
 func Finish(service *services.Service) {
 	service.Finish()
 
-	tracelog.COMPLETED(service.UserId, "Finish")
+	tracelog.Completed(service.UserID, "Finish")
 }

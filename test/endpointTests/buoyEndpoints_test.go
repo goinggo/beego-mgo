@@ -2,9 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE handle.
 
-/*
-	Implements tests for the buoy endpoints
-*/
+// Package endpointTests implements tests for the buoy endpoints.
 package endpointTests
 
 import (
@@ -24,10 +22,10 @@ func TestStation(t *testing.T) {
 	w := httptest.NewRecorder()
 	beego.BeeApp.Handlers.ServeHTTP(w, r)
 
-	tracelog.TRACE("testing", "TestStation", "Code[%d]\n%s", w.Code, w.Body.String())
+	tracelog.Trace("testing", "TestStation", "Code[%d]\n%s", w.Code, w.Body.String())
 
 	response := struct {
-		StationId string `json:"station_id"`
+		StationID string `json:"station_id"`
 		Name      string `json:"name"`
 		LocDesc   string `json:"location_desc"`
 		Condition struct {
@@ -50,7 +48,7 @@ func TestStation(t *testing.T) {
 			So(w.Body.Len(), ShouldBeGreaterThan, 0)
 		})
 		Convey("There Should Be A Result For Station 42002", func() {
-			So(response.StationId, ShouldEqual, "42002")
+			So(response.StationID, ShouldEqual, "42002")
 		})
 	})
 }
@@ -62,10 +60,10 @@ func TestInvalidStation(t *testing.T) {
 	w := httptest.NewRecorder()
 	beego.BeeApp.Handlers.ServeHTTP(w, r)
 
-	tracelog.TRACE("testing", "TestStation", "Code[%d]\n%s", w.Code, w.Body.String())
+	tracelog.Trace("testing", "TestStation", "Code[%d]\n%s", w.Code, w.Body.String())
 
 	response := struct {
-		StationId string `json:"station_id"`
+		StationID string `json:"station_id"`
 		Name      string `json:"name"`
 		LocDesc   string `json:"location_desc"`
 		Condition struct {
@@ -88,7 +86,7 @@ func TestInvalidStation(t *testing.T) {
 			So(w.Body.Len(), ShouldBeGreaterThan, 0)
 		})
 		Convey("The Result Should Be Empty For Station 00000", func() {
-			So(response.StationId, ShouldBeBlank)
+			So(response.StationID, ShouldBeBlank)
 		})
 	})
 }
@@ -100,7 +98,7 @@ func TestMissingStation(t *testing.T) {
 	w := httptest.NewRecorder()
 	beego.BeeApp.Handlers.ServeHTTP(w, r)
 
-	tracelog.TRACE("testing", "TestStation", "Code[%d]\n%s", w.Code, w.Body.String())
+	tracelog.Trace("testing", "TestStation", "Code[%d]\n%s", w.Code, w.Body.String())
 
 	err := struct {
 		Errors []string `json:"errors"`

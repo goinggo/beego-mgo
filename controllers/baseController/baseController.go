@@ -2,9 +2,7 @@
 // Use of baseController source code is governed by a BSD-style
 // license that can be found in the LICENSE handle.
 
-/*
-	Implements boilerplate code for all baseControllers
-*/
+// Package baseController implements boilerplate code for all baseControllers.
 package baseController
 
 import (
@@ -23,7 +21,7 @@ import (
 //** TYPES
 
 type (
-	// BaseController composes all required types and behavior
+	// BaseController composes all required types and behavior.
 	BaseController struct {
 		beego.Controller
 		services.Service
@@ -32,50 +30,49 @@ type (
 
 //** INTERCEPT FUNCTIONS
 
-// Prepare is called prior to the baseController method
+// Prepare is called prior to the baseController method.
 func (baseController *BaseController) Prepare() {
-	baseController.UserId = baseController.GetString("userId")
-	if baseController.UserId == "" {
-		baseController.UserId = baseController.GetString(":userId")
+	baseController.UserID = baseController.GetString("userID")
+	if baseController.UserID == "" {
+		baseController.UserID = baseController.GetString(":userID")
 	}
-	if baseController.UserId == "" {
-		baseController.UserId = "Unknown"
+	if baseController.UserID == "" {
+		baseController.UserID = "Unknown"
 	}
 
-	err := baseController.Service.Prepare()
-	if err != nil {
-		tracelog.Errorf(err, baseController.UserId, "BaseController.Prepare", baseController.Ctx.Request.URL.Path)
+	if err := baseController.Service.Prepare(); err != nil {
+		tracelog.Errorf(err, baseController.UserID, "BaseController.Prepare", baseController.Ctx.Request.URL.Path)
 		baseController.ServeError(err)
 		return
 	}
 
-	tracelog.Trace(baseController.UserId, "BaseController.Prepare", "UserId[%s] Path[%s]", baseController.UserId, baseController.Ctx.Request.URL.Path)
+	tracelog.Trace(baseController.UserID, "BaseController.Prepare", "UserID[%s] Path[%s]", baseController.UserID, baseController.Ctx.Request.URL.Path)
 }
 
-// Finish is called once the baseController method completes
+// Finish is called once the baseController method completes.
 func (baseController *BaseController) Finish() {
 	defer func() {
 		if baseController.MongoSession != nil {
-			mongo.CloseSession(baseController.UserId, baseController.MongoSession)
+			mongo.CloseSession(baseController.UserID, baseController.MongoSession)
 			baseController.MongoSession = nil
 		}
 	}()
 
-	tracelog.Completedf(baseController.UserId, "Finish", baseController.Ctx.Request.URL.Path)
+	tracelog.Completedf(baseController.UserID, "Finish", baseController.Ctx.Request.URL.Path)
 }
 
 //** VALIDATION
 
 // ParseAndValidate will run the params through the validation framework and then
-// response with the specified localized or provided message
+// response with the specified localized or provided message.
 func (baseController *BaseController) ParseAndValidate(params interface{}) bool {
-	err := baseController.ParseForm(params)
-	if err != nil {
+	// This is not working anymore :(
+	if err := baseController.ParseForm(params); err != nil {
 		baseController.ServeError(err)
 		return false
 	}
 
-	valid := validation.Validation{}
+	var valid validation.Validation
 	ok, err := valid.Valid(params)
 	if err != nil {
 		baseController.ServeError(err)
@@ -84,7 +81,8 @@ func (baseController *BaseController) ParseAndValidate(params interface{}) bool 
 
 	if ok == false {
 		// Build a map of the Error messages for each field
-		messages2 := map[string]string{}
+		messages2 := make(map[string]string)
+
 		val := reflect.ValueOf(params).Elem()
 		for i := 0; i < val.NumField(); i++ {
 			// Look for an Error tag in the field
@@ -99,22 +97,22 @@ func (baseController *BaseController) ParseAndValidate(params interface{}) bool 
 		}
 
 		// Build the Error response
-		Errors := []string{}
+		var errors []string
 		for _, err := range valid.Errors {
 			// Match an Error from the validation framework Errors
 			// to a field name we have a mapping for
 			message, ok := messages2[err.Field]
 			if ok == true {
 				// Use a localized message if one exists
-				Errors = append(Errors, localize.T(message))
+				errors = append(errors, localize.T(message))
 				continue
 			}
 
 			// No match, so use the message as is
-			Errors = append(Errors, err.Message)
+			errors = append(errors, err.Message)
 		}
 
-		baseController.ServeValidationErrors(Errors)
+		baseController.ServeValidationErrors(errors)
 		return false
 	}
 
@@ -123,7 +121,7 @@ func (baseController *BaseController) ParseAndValidate(params interface{}) bool 
 
 //** EXCEPTIONS
 
-// ServeError prepares and serves an Error exception
+// ServeError prepares and serves an Error exception.
 func (baseController *BaseController) ServeError(err error) {
 	baseController.Data["json"] = struct {
 		Error string `json:"Error"`
@@ -132,7 +130,7 @@ func (baseController *BaseController) ServeError(err error) {
 	baseController.ServeJson()
 }
 
-// ServeValidationErrors prepares and serves a validation exception
+// ServeValidationErrors prepares and serves a validation exception.
 func (baseController *BaseController) ServeValidationErrors(Errors []string) {
 	baseController.Data["json"] = struct {
 		Errors []string `json:"Errors"`
@@ -143,13 +141,13 @@ func (baseController *BaseController) ServeValidationErrors(Errors []string) {
 
 //** CATCHING PANICS
 
-// CatchPanic is used to catch any Panic and log exceptions. Returns a 500 as the response
+// CatchPanic is used to catch any Panic and log exceptions. Returns a 500 as the response.
 func (baseController *BaseController) CatchPanic(functionName string) {
 	if r := recover(); r != nil {
 		buf := make([]byte, 10000)
 		runtime.Stack(buf, false)
 
-		tracelog.Warning(baseController.Service.UserId, functionName, "PANIC Defered [%v] : Stack Trace : %v", r, string(buf))
+		tracelog.Warning(baseController.Service.UserID, functionName, "PANIC Defered [%v] : Stack Trace : %v", r, string(buf))
 
 		baseController.ServeError(fmt.Errorf("%v", r))
 	}
@@ -157,7 +155,7 @@ func (baseController *BaseController) CatchPanic(functionName string) {
 
 //** AJAX SUPPORT
 
-// AjaxResponse returns a standard ajax response
+// AjaxResponse returns a standard ajax response.
 func (baseController *BaseController) AjaxResponse(resultCode int, resultString string, data interface{}) {
 	response := struct {
 		Result       int
