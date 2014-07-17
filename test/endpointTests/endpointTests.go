@@ -24,7 +24,7 @@ const (
 
 // init initializes all required packages and systems
 func init() {
-	tracelog.Start(tracelog.LEVEL_TRACE)
+	tracelog.Start(tracelog.LevelTrace)
 
 	// Init mongo
 	tracelog.Started("main", "Initializing Mongo")

@@ -51,7 +51,7 @@ func NewTranslation(userLocale string, defaultLocale string) (i18n.TranslateFunc
 func LoadJSON(userLocale string, translationDocument string) error {
 	tracelog.Startedf("localize", "LoadJSON", "userLocale[%s] length[%d]", userLocale, len(translationDocument))
 
-	tranDocuments := []map[string]interface{}{}
+	var tranDocuments []map[string]interface{}
 	if err := json.Unmarshal([]byte(translationDocument), &tranDocuments); err != nil {
 		tracelog.CompletedErrorf(err, "localize", "LoadJSON", "**************>")
 		return err

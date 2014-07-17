@@ -24,7 +24,7 @@ func TestStation(t *testing.T) {
 
 	tracelog.Trace("testing", "TestStation", "Code[%d]\n%s", w.Code, w.Body.String())
 
-	response := struct {
+	var response struct {
 		StationID string `json:"station_id"`
 		Name      string `json:"name"`
 		LocDesc   string `json:"location_desc"`
@@ -37,7 +37,7 @@ func TestStation(t *testing.T) {
 			WindDirection int     `json:"wind_direction_degnorth"`
 			WindGust      float64 `json:"gust_wind_speed_milehour"`
 		} `json:"location"`
-	}{}
+	}
 	json.Unmarshal(w.Body.Bytes(), &response)
 
 	Convey("Subject: Test Station Endpoint\n", t, func() {
@@ -62,7 +62,7 @@ func TestInvalidStation(t *testing.T) {
 
 	tracelog.Trace("testing", "TestStation", "Code[%d]\n%s", w.Code, w.Body.String())
 
-	response := struct {
+	var response struct {
 		StationID string `json:"station_id"`
 		Name      string `json:"name"`
 		LocDesc   string `json:"location_desc"`
@@ -75,7 +75,7 @@ func TestInvalidStation(t *testing.T) {
 			WindDirection int     `json:"wind_direction_degnorth"`
 			WindGust      float64 `json:"gust_wind_speed_milehour"`
 		} `json:"location"`
-	}{}
+	}
 	json.Unmarshal(w.Body.Bytes(), &response)
 
 	Convey("Subject: Test Station Endpoint\n", t, func() {
@@ -100,9 +100,9 @@ func TestMissingStation(t *testing.T) {
 
 	tracelog.Trace("testing", "TestStation", "Code[%d]\n%s", w.Code, w.Body.String())
 
-	err := struct {
+	var err struct {
 		Errors []string `json:"errors"`
-	}{}
+	}
 	json.Unmarshal(w.Body.Bytes(), &err)
 
 	Convey("Subject: Test Station Endpoint\n", t, func() {
