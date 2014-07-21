@@ -16,7 +16,7 @@ import (
 )
 
 func main() {
-	tracelog.Start(tracelog.LEVEL_TRACE)
+	tracelog.Start(tracelog.LevelTrace)
 
 	// Init mongo
 	tracelog.Started("main", "Initializing Mongo")

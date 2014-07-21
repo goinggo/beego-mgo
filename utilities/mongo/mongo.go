@@ -13,8 +13,8 @@ import (
 
 	"github.com/goinggo/tracelog"
 	"github.com/kelseyhightower/envconfig"
-	"labix.org/v2/mgo"
-	"labix.org/v2/mgo/bson"
+	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 )
 
 const (

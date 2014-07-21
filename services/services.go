@@ -9,7 +9,7 @@ import (
 	"github.com/goinggo/beego-mgo/utilities/helper"
 	"github.com/goinggo/beego-mgo/utilities/mongo"
 	"github.com/goinggo/tracelog"
-	"labix.org/v2/mgo"
+	"gopkg.in/mgo.v2"
 )
 
 //** TYPES
