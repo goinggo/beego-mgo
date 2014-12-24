@@ -8,7 +8,7 @@ package services
 import (
 	"github.com/goinggo/beego-mgo/utilities/helper"
 	"github.com/goinggo/beego-mgo/utilities/mongo"
-	"github.com/goinggo/tracelog"
+	log "github.com/goinggo/tracelog"
 	"gopkg.in/mgo.v2"
 )
 
@@ -28,7 +28,7 @@ type (
 func (service *Service) Prepare() (err error) {
 	service.MongoSession, err = mongo.CopyMonotonicSession(service.UserID)
 	if err != nil {
-		tracelog.Error(err, service.UserID, "Service.Prepare")
+		log.Error(err, service.UserID, "Service.Prepare")
 		return err
 	}
 

@@ -11,8 +11,9 @@ import (
 	"testing"
 
 	"encoding/json"
+
 	"github.com/astaxie/beego"
-	"github.com/goinggo/tracelog"
+	log "github.com/goinggo/tracelog"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
@@ -22,7 +23,7 @@ func TestStation(t *testing.T) {
 	w := httptest.NewRecorder()
 	beego.BeeApp.Handlers.ServeHTTP(w, r)
 
-	tracelog.Trace("testing", "TestStation", "Code[%d]\n%s", w.Code, w.Body.String())
+	log.Trace("testing", "TestStation", "Code[%d]\n%s", w.Code, w.Body.String())
 
 	var response struct {
 		StationID string `json:"station_id"`
@@ -60,7 +61,7 @@ func TestInvalidStation(t *testing.T) {
 	w := httptest.NewRecorder()
 	beego.BeeApp.Handlers.ServeHTTP(w, r)
 
-	tracelog.Trace("testing", "TestStation", "Code[%d]\n%s", w.Code, w.Body.String())
+	log.Trace("testing", "TestStation", "Code[%d]\n%s", w.Code, w.Body.String())
 
 	var response struct {
 		StationID string `json:"station_id"`
@@ -98,7 +99,7 @@ func TestMissingStation(t *testing.T) {
 	w := httptest.NewRecorder()
 	beego.BeeApp.Handlers.ServeHTTP(w, r)
 
-	tracelog.Trace("testing", "TestStation", "Code[%d]\n%s", w.Code, w.Body.String())
+	log.Trace("testing", "TestStation", "Code[%d]\n%s", w.Code, w.Body.String())
 
 	var err struct {
 		Errors []string `json:"errors"`

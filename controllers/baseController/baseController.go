@@ -10,12 +10,13 @@ import (
 	"runtime"
 
 	"fmt"
+
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/validation"
 	"github.com/goinggo/beego-mgo/localize"
 	"github.com/goinggo/beego-mgo/services"
 	"github.com/goinggo/beego-mgo/utilities/mongo"
-	"github.com/goinggo/tracelog"
+	log "github.com/goinggo/tracelog"
 )
 
 //** TYPES
@@ -41,12 +42,12 @@ func (baseController *BaseController) Prepare() {
 	}
 
 	if err := baseController.Service.Prepare(); err != nil {
-		tracelog.Errorf(err, baseController.UserID, "BaseController.Prepare", baseController.Ctx.Request.URL.Path)
+		log.Errorf(err, baseController.UserID, "BaseController.Prepare", baseController.Ctx.Request.URL.Path)
 		baseController.ServeError(err)
 		return
 	}
 
-	tracelog.Trace(baseController.UserID, "BaseController.Prepare", "UserID[%s] Path[%s]", baseController.UserID, baseController.Ctx.Request.URL.Path)
+	log.Trace(baseController.UserID, "BaseController.Prepare", "UserID[%s] Path[%s]", baseController.UserID, baseController.Ctx.Request.URL.Path)
 }
 
 // Finish is called once the baseController method completes.
@@ -58,7 +59,7 @@ func (baseController *BaseController) Finish() {
 		}
 	}()
 
-	tracelog.Completedf(baseController.UserID, "Finish", baseController.Ctx.Request.URL.Path)
+	log.Completedf(baseController.UserID, "Finish", baseController.Ctx.Request.URL.Path)
 }
 
 //** VALIDATION
@@ -147,7 +148,7 @@ func (baseController *BaseController) CatchPanic(functionName string) {
 		buf := make([]byte, 10000)
 		runtime.Stack(buf, false)
 
-		tracelog.Warning(baseController.Service.UserID, functionName, "PANIC Defered [%v] : Stack Trace : %v", r, string(buf))
+		log.Warning(baseController.Service.UserID, functionName, "PANIC Defered [%v] : Stack Trace : %v", r, string(buf))
 
 		baseController.ServeError(fmt.Errorf("%v", r))
 	}

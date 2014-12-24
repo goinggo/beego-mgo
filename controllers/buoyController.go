@@ -8,7 +8,7 @@ package controllers
 import (
 	bc "github.com/goinggo/beego-mgo/controllers/baseController"
 	"github.com/goinggo/beego-mgo/services/buoyService"
-	"github.com/goinggo/tracelog"
+	log "github.com/goinggo/tracelog"
 )
 
 //** TYPES
@@ -23,11 +23,11 @@ type BuoyController struct {
 // Index is the initial view for the buoy system.
 func (controller *BuoyController) Index() {
 	region := "Gulf Of Mexico"
-	tracelog.Startedf(controller.UserID, "BuoyController.Index", "Region[%s]", region)
+	log.Startedf(controller.UserID, "BuoyController.Index", "Region[%s]", region)
 
 	buoyStations, err := buoyService.FindRegion(&controller.Service, region)
 	if err != nil {
-		tracelog.CompletedErrorf(err, controller.UserID, "BuoyController.Index", "Region[%s]", region)
+		log.CompletedErrorf(err, controller.UserID, "BuoyController.Index", "Region[%s]", region)
 		controller.ServeError(err)
 		return
 	}
@@ -55,7 +55,7 @@ func (controller *BuoyController) RetrieveStation() {
 
 	buoyStation, err := buoyService.FindStation(&controller.Service, params.StationID)
 	if err != nil {
-		tracelog.CompletedErrorf(err, controller.UserID, "BuoyController.RetrieveStation", "StationID[%s]", params.StationID)
+		log.CompletedErrorf(err, controller.UserID, "BuoyController.RetrieveStation", "StationID[%s]", params.StationID)
 		controller.ServeError(err)
 		return
 	}
@@ -82,7 +82,7 @@ func (controller *BuoyController) RetrieveStationJSON() {
 
 	buoyStation, err := buoyService.FindStation(&controller.Service, params.StationID)
 	if err != nil {
-		tracelog.CompletedErrorf(err, controller.UserID, "Station", "StationID[%s]", params.StationID)
+		log.CompletedErrorf(err, controller.UserID, "Station", "StationID[%s]", params.StationID)
 		controller.ServeError(err)
 		return
 	}

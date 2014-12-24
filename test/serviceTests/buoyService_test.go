@@ -6,9 +6,10 @@
 package serviceTests
 
 import (
+	"testing"
+
 	"github.com/goinggo/beego-mgo/services/buoyService"
 	. "github.com/smartystreets/goconvey/convey"
-	"testing"
 )
 
 // Test_Station checks the station service call is working

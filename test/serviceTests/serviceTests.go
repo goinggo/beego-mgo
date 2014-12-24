@@ -10,7 +10,7 @@ import (
 	"github.com/goinggo/beego-mgo/services"
 	"github.com/goinggo/beego-mgo/utilities/helper"
 	"github.com/goinggo/beego-mgo/utilities/mongo"
-	"github.com/goinggo/tracelog"
+	log "github.com/goinggo/tracelog"
 )
 
 //** CONSTANTS
@@ -33,13 +33,13 @@ type (
 
 // init initializes all required packages and systems
 func init() {
-	tracelog.Start(tracelog.LEVEL_TRACE)
+	log.Start(log.LEVEL_TRACE)
 
 	// Init mongo
-	tracelog.Started("main", "Initializing Mongo")
+	log.Started("main", "Initializing Mongo")
 	err := mongo.Startup(helper.MainGoRoutine)
 	if err != nil {
-		tracelog.CompletedError(err, helper.MainGoRoutine, "initTesting")
+		log.CompletedError(err, helper.MainGoRoutine, "initTesting")
 		return
 	}
 
@@ -58,11 +58,11 @@ func Prepare() *services.Service {
 
 	err := service.Prepare()
 	if err != nil {
-		tracelog.Error(err, service.UserID, "Prepare")
+		log.Error(err, service.UserID, "Prepare")
 		return nil
 	}
 
-	tracelog.Trace(service.UserID, "Before", "UserID[%s]", service.UserID)
+	log.Trace(service.UserID, "Before", "UserID[%s]", service.UserID)
 	return &service
 }
 
@@ -70,5 +70,5 @@ func Prepare() *services.Service {
 func Finish(service *services.Service) {
 	service.Finish()
 
-	tracelog.Completed(service.UserID, "Finish")
+	log.Completed(service.UserID, "Finish")
 }

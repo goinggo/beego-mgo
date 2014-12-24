@@ -10,7 +10,7 @@ import (
 	_ "github.com/goinggo/beego-mgo/routes" // Initalize routes
 	"github.com/goinggo/beego-mgo/utilities/helper"
 	"github.com/goinggo/beego-mgo/utilities/mongo"
-	"github.com/goinggo/tracelog"
+	log "github.com/goinggo/tracelog"
 )
 
 //** CONSTANTS
@@ -24,13 +24,13 @@ const (
 
 // init initializes all required packages and systems
 func init() {
-	tracelog.Start(tracelog.LevelTrace)
+	log.Start(log.LevelTrace)
 
 	// Init mongo
-	tracelog.Started("main", "Initializing Mongo")
+	log.Started("main", "Initializing Mongo")
 	err := mongo.Startup(helper.MainGoRoutine)
 	if err != nil {
-		tracelog.CompletedError(err, helper.MainGoRoutine, "initTesting")
+		log.CompletedError(err, helper.MainGoRoutine, "initTesting")
 		return
 	}
 
