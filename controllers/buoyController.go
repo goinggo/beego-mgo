@@ -46,7 +46,7 @@ func (controller *BuoyController) Index() {
 // RetrieveStation handles the example 2 tab.
 func (controller *BuoyController) RetrieveStation() {
 	var params struct {
-		StationID string `form:"stationID" valid:"Required; MinSize(4)" error:"invalid_station_id"`
+		StationID string `form:"stationId" valid:"Required; MinSize(4)" error:"invalid_station_id"`
 	}
 
 	if controller.ParseAndValidate(&params) == false {
