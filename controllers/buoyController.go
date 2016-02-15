@@ -88,5 +88,5 @@ func (controller *BuoyController) RetrieveStationJSON() {
 	}
 
 	controller.Data["json"] = buoyStation
-	controller.ServeJson()
+	controller.ServeJSON()
 }
