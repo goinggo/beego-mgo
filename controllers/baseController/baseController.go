@@ -128,7 +128,7 @@ func (baseController *BaseController) ServeError(err error) {
 		Error string `json:"Error"`
 	}{err.Error()}
 	baseController.Ctx.Output.SetStatus(500)
-	baseController.ServeJson()
+	baseController.ServeJSON()
 }
 
 // ServeValidationErrors prepares and serves a validation exception.
@@ -137,7 +137,7 @@ func (baseController *BaseController) ServeValidationErrors(Errors []string) {
 		Errors []string `json:"Errors"`
 	}{Errors}
 	baseController.Ctx.Output.SetStatus(409)
-	baseController.ServeJson()
+	baseController.ServeJSON()
 }
 
 //** CATCHING PANICS
@@ -169,5 +169,5 @@ func (baseController *BaseController) AjaxResponse(resultCode int, resultString 
 	}
 
 	baseController.Data["json"] = response
-	baseController.ServeJson()
+	baseController.ServeJSON()
 }
